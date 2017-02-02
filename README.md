@@ -5,7 +5,7 @@ Ils ont été réalisé par et pour l'administration d'une association.
 
 ## Par où commencer
 
-Retrouvez l'ensemble du code des modules dans les dossiers portants leurs nom.
+Retrouvez l'ensemble du code des modules dans les dossiers portants leurs noms.
 Dans le dossier *release* se trouve l'ensemble des modules prêt à l'usage, sous la forme nom_module-version.tar.gz
 
 ### Prérequis
@@ -27,7 +27,7 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 
 ## Versionnement
 
-On utilise [SemVer](http://semver.org/) pour la gestion des versions.
+Nous utilisons [SemVer](http://semver.org/) pour la gestion des versions.
 
 ## Authors
 
@@ -37,4 +37,4 @@ Voir la liste des [contributeurs](https://github.com/nfrery/modules-garradin/con
 
 ## Licence
 
-Ce projet est sous la licence AGPL v3 - voir la [LICENSE.md](LICENSE.me) pour les détails (en).
+Ce projet est sous la licence AGPL v3 - voir la [LICENSE.md](LICENSE.md) pour les détails (en).

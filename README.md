@@ -23,7 +23,8 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 
 ## Liste des modules à faire
 
-* ...
+* plugin-recherche-avancee: module qui permet, comme son nom l'indique, d'effectuer des recherches avancées sur la base de données. Il permet d'échapper à la rédaction de requêtes SQL.
+* plugin-recu-don: module permettant de remplir le cerfa 11580*03 pour permettre la déduction fiscale d'un don.
 
 ## Versionnement
 

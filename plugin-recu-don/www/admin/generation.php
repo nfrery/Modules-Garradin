@@ -22,19 +22,19 @@ require_once(PLUGIN_ROOT . '/lib/FPDI/fpdi.php');
 	$pdf->SetXY(20, 42);
 	$pdf->Write(0, $config->get('nom_asso'));
 	$pdf->SetXY(24,53);
-	$pdf->Write(0, "10");
+	$pdf->Write(0, utf8_decode($plugin->getConfig('numero_rue')));
 	$pdf->SetXY(42,53);
-	$pdf->Write(0, utf8_decode("Avenue du vélo"));
+	$pdf->Write(0, utf8_decode($plugin->getConfig('rue')));
 	$pdf->SetXY(38,59);
-	$pdf->Write(0, "10000");
+	$pdf->Write(0, utf8_decode($plugin->getConfig('codepostal')));
 	$pdf->SetXY(72,59);
-	$pdf->Write(0, "Troyes");
+	$pdf->Write(0, utf8_decode($plugin->getConfig('ville')));
 	$pdf->SetXY(20,69);
-	$pdf->Write(0, utf8_decode("Cette association a pour but la promotion de l'utilisation du vélo dans le cadre utilitaire et"));
+	$pdf->Write(0, utf8_decode($plugin->getConfig('objet0')));
 	$pdf->SetXY(20,73);
-	$pdf->Write(0, utf8_decode("quotidien de ses usagers et l'augmentation du nombre de cyclistes quotidiens dans de"));
+	$pdf->Write(0, utf8_decode($plugin->getConfig('objet1')));
 	$pdf->SetXY(20,77);
-	$pdf->Write(0, utf8_decode("bonnes conditions de sécurité et de fluidité dans l'agglomération troyenne."));
+	$pdf->Write(0, utf8_decode($plugin->getConfig('objet2')));
 	$pdf->SetXY(19,135);
 	$pdf->Write(0, "X");
 
@@ -55,19 +55,25 @@ require_once(PLUGIN_ROOT . '/lib/FPDI/fpdi.php');
 	$pdf->SetXY(85,69);	// Somme en chiffre
 	$pdf->Write(0, utf8_decode("***5000***"));
 	$pdf->SetXY(58,79);	// Somme en toute lettre
-	$pdf->Write(0, utf8_decode("Cinq milles euros"));
+	$pdf->Write(0, utf8_decode(numfmt_create('fr_FR', \NumberFormatter::SPELLOUT)->format(5000)) . ' euros');
 	$pdf->SetXY(70,88);	// Jour du don
 	$pdf->Write(0, "01");
 	$pdf->SetXY(81,88);	// Mois du don
 	$pdf->Write(0, "01");
 	$pdf->SetXY(97,88);	// Année du don
 	$pdf->Write(0, "1970");
-	$pdf->SetXY(56.5,103);	// 200
-	$pdf->Write(0, "X");
-	$pdf->SetXY(106.5,103);	// 238 bis
-	$pdf->Write(0, "X");
-	$pdf->SetXY(156.5,103);	// 885-0 V bis A
-	$pdf->Write(0, "X");
+	if($plugin->getConfig('droit_art200')){
+		$pdf->SetXY(56.5,103);	// 200
+		$pdf->Write(0, "X");
+	}
+	if($plugin->getConfig('droit_art238bis')){
+		$pdf->SetXY(106.5,103);	// 238 bis
+		$pdf->Write(0, "X");
+	}
+	if($plugin->getConfig('droit_art885-0VbisA')){
+		$pdf->SetXY(156.5,103);	// 885-0 V bis A
+		$pdf->Write(0, "X");
+	}
 	$pdf->SetXY(119,120.5);	// Déclaration de don manuel
 	$pdf->Write(0, "X");
 	$pdf->SetXY(19,142.5);	// Numéraire

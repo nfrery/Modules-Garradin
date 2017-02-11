@@ -1,5 +1,5 @@
 {include file="admin/_head.tpl" title="Configuration — `$plugin.nom`" current="plugin_`$plugin.id`"}
-{include file="`$plugin_root`/templates/_menu.tpl" current="recu"}
+{include file="`$plugin_root`/templates/_menu.tpl" current="config"}
 
 {if $error}
     {if $error == 'OK'}
@@ -18,30 +18,14 @@
     <fieldset>
         <legend>Adresse de l'association</legend>
         <dl>
-            <dt>
-                <label>
-                    Numéro de rue<br>
-                    <input type="text" maxlength=5 name="numero_rue" value="{form_field data=$plugin.config name=numero_rue}" />
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    Rue<br>
-                    <input type="text" name="rue" value="{form_field data=$plugin.config name=rue}" />
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    Code postal<br>
-                    <input type="text" name="codepostal" value="{form_field data=$plugin.config name=codepostal}" />
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    Ville<br>
-                    <input type="text" name="ville" value="{form_field data=$plugin.config name=ville}" />
-                </label>
-            </dt>
+            <dt><label for="f_numero_rue">Numéro de rue</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" id="f_numero_rue" maxlength=5 name="numero_rue" value="{form_field data=$plugin.config name=numero_rue}" /></dd>
+            <dt><label for="f_rue">Rue</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" id="f_rue" name="rue" value="{form_field data=$plugin.config name=rue}" /></dd>
+            <dt><label for="f_codepostal">Code postal</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" id="f_codepostal" name="codepostal" value="{form_field data=$plugin.config name=codepostal}" /></dd>
+            <dt><label for="f_ville">Ville</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" id="f_ville" name="ville" value="{form_field data=$plugin.config name=ville}" /></dd>
         </dl>
     </fieldset>
 
@@ -49,51 +33,27 @@
         <legend>Objet de l'association</legend>
         L'objet (but) de l'association doit tenir sur 3 lignes, chaque ligne pouvant accueillir un maximum de 100 caractères.
         <dl>
-            <dt>
-                <label>
-                    <input type="text" maxlength=100 name="objet0" value="{form_field data=$plugin.config name=objet0}" />
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    <input type="text" maxlength=100 name="objet1" value="{form_field data=$plugin.config name=objet1}" />
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    <input type="text" maxlength=100 name="objet2" value="{form_field data=$plugin.config name=objet2}" />
-                </label>
-            </dt>
+            <dt><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" maxlength=100 name="objet0" value="{form_field data=$plugin.config name=objet0}" /></dd>
+            <dd><input type="text" maxlength=100 name="objet1" value="{form_field data=$plugin.config name=objet1}" /></dd>
+            <dd><input type="text" maxlength=100 name="objet2" value="{form_field data=$plugin.config name=objet2}" /></dd>
         </dl>
     </fieldset>
 
     <fieldset>
         <legend>Droit à la réduction d'impôt prévue par les articles:</legend>
         <dl>
-            <dt>
-                <label>
-                    Article 200
-                    <input type="checkbox" name="droit_art200" {form_field name="droit_art200" checked=1 data=$plugin.config } />
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    Article 238 bis
-                    <input type="checkbox" name="droit_art238bis" {form_field name="droit_art238bis" checked=1 data=$plugin.config } />
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    Article 885-0V bis A
-                    <input type="checkbox" name="droit_art885-0VbisA" {form_field name="droit_art885-0VbisA" checked=1 data=$plugin.config } />
-                </label>
-            </dt>
+            <dt><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dt><input type="checkbox" name="droit_art200" {form_field name="droit_art200" checked=1 data=$plugin.config } /><label>Article 200</label></dt>
+            <dt><input type="checkbox" name="droit_art238bis" {form_field name="droit_art238bis" checked=1 data=$plugin.config } /><label>Article 238 bis</label></dt>
+            <dt><input type="checkbox" name="droit_art885-0VbisA" {form_field name="droit_art885-0VbisA" checked=1 data=$plugin.config } /><label>Article 885-0V bis A</label></dt>
         </dl>
     </fieldset>
 
     <fieldset>
         <legend>Signature du responsable</legend>
         <dl>
+            <dt><b title="(Champ obligatoire)">obligatoire</b></dt>
             <dt><label>Signature en base64</label>
             <dd><input type="text" name="signaturetxt" value="{form_field name=signaturetxt data=$plugin.config }" /></dd>
         </dl>

@@ -26,6 +26,7 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 ## Liste des modules à faire
 
 * plugin-recherche-avancee: module qui permet, comme son nom l'indique, d'effectuer des recherches avancées sur la base de données. Il permet d'échapper à la rédaction de requêtes SQL.
+* plugin-fluxbb: module qui sert à faire une liaison entre Garradin et FluxBB. Les membres qui sont à jours de cotisation sur Garradin vont soit avoir un profil, créé par le plugin, sur FluxBB, soit être relié à leurs profils sur FluxBB. Cela permettra de les intégrers à un groupe Adhérents sur FluxBB tant qu'ils seront à jour de cotisation.
 
 
 ## Versionnement

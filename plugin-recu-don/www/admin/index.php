@@ -5,11 +5,6 @@ namespace Garradin;
 $error = false;
 $gendon = new Plugin\RecuDon\GenDon;
 
-if (isset($_GET['ok']))
-{
-    $error = 'OK';
-}
-
 if ($user['droits']['config'] < Membres::DROIT_ADMIN)
 {
     throw new UserException("Vous n'avez pas le droit d'accéder à cette page.");
@@ -20,7 +15,7 @@ if (!empty($_POST['save'])) {
         $error = 'Une erreur est survenue, merci de renvoyer le formulaire.';
     } else {
         try {
-            $gendon->add([
+            $id_add = $gendon->add([
                 'nom' => Utils::post('nom'),
                 'prenom' => Utils::post('prenom'),
                 'adresse' => Utils::post('adresse'),
@@ -34,7 +29,7 @@ if (!empty($_POST['save'])) {
                 'gen_ordre' => Utils::post('numero'),
             ]);
 
-            Utils::redirect(PLUGIN_URL . 'index.php');
+            Utils::redirect(PLUGIN_URL . 'index.php?ok='.$id_add.'&ordre='.Utils::post('numero'));
         } catch (UserException $e) {
             $error = $e->getMessage();
         }
@@ -45,6 +40,9 @@ if (!empty($_POST['save'])) {
 
 $trecus = $gendon->listSimple();
 
+$tpl->assign('date', $membres->sessionGet('compta_date') ?: false);
 $tpl->assign('trecus', $trecus);
 $tpl->assign('error', $error);
+$tpl->assign('ok', (int) Utils::get('ok'));
+$tpl->assign('ordre', (string) Utils::get('ordre'));
 $tpl->display(PLUGIN_ROOT . '/templates/index.tpl');

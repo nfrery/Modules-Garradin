@@ -2,92 +2,56 @@
 {include file="`$plugin_root`/templates/_menu.tpl" current="index"}
 
 {if $error}
-    {if $error == 'OK'}
-    <p class="confirm">
-        Le reçu numéro {$_POST['numero']} a bien été crée.<br>
-        Télécharger le reçu en PDF en <a href="{plugin_url file="generation.php"}"."?id="."{$_POST['id']}">cliquant ici</a>.
-    </p>
-    {else}
     <p class="error">
         {$error|escape}
     </p>
-    {/if}
 {/if}
 
+{if $ok}
+    <p class="confirm">
+        Le reçu numéro {$ordre|escape} a bien été crée.<br>
+        Télécharger le reçu en PDF en <a href="{plugin_url file="generation.php"}?id={$ok|escape}">cliquant ici</a>.
+    </p>
+{/if}
 
 <form method="post" action="{$self_url|escape}">
-
     <fieldset>
         <legend>Adresse du bénéficiaire</legend>
         <dl>
-            <dt>
-                <label>
-                    Adresse<br>
-                    <input type="text" name="adresse" required="required"/>
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    Code postal<br>
-                    <input type="text" name="codepostal" required="required"/>
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    Ville<br>
-                    <input type="text" name="ville" required="required"/>
-                </label>
-            </dt>
+            <dt><label for="f_adresse">Adresse</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" id="f_adresse" name="adresse" required/></dd>
+            <dt><label for="f_codepostal">Code postal</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" id="f_codepostal" name="codepostal" required/></dd>
+            <dt><label for="f_ville">Ville</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" id="f_ville" name="ville" required/></dd>
         </dl>
     </fieldset>
 
     <fieldset>
         <legend>Bénéficiaire</legend>
         <dl>
-            <dt>
-                <label>
-                	Nom<br>
-                    <input type="text" maxlength=100 name="nom"  required="required"/>
-                </label>
-            </dt>
-            <dt>
-                <label>
-                	Prénom<br>
-                    <input type="text" maxlength=100 name="prenom" required="required"/>
-                </label>
-            </dt>
+            <dt><label for="f_nom">Nom</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" id="f_nom" maxlength=100 name="nom" required/></dd>
+            <dt><label for="f_prenom">Prénom</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" id="f_prenom" maxlength=100 name="prenom" required/></dd>
         </dl>
     </fieldset>
 
     <fieldset>
         <legend>Informations du dons</legend>
         <dl>
-            <dt>
-                <label>
-                    Numéro d'ordre<br>
-                    <input type="text" maxlength=100 name="numero"  required="required"/>
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    Date du don<br>
-                    <input type="date" name="date" id="f_date" size="10" required="required"/>
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    Montant du don<br>
-                    <input type="number" min="0" name="montant" required="required"/>
-                </label>
-            </dt>
-            <dt>
-                <label>
-                    Mode de paiement<br>
-                    <input type="radio" name="paiement" value="0"/> Espèces<br>
-                    <input type="radio" name="paiement" value="1"/> Chèque<br>
-                    <input type="radio" name="paiement" value="2"/> Virement/Carte bancaire
-                </label>
-            </dt>
+            <dt><label for="f_ordre">Numéro d'ordre</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="text" id="f_ordre" name="numero"  required/></dd>
+            <dt><label for="f_date">Date du don</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="date" name="date" id="f_date" value="{form_field name=date default=$date}" required/></dd>
+            <dt><label for="f_montant">Montant du don</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="number" id="f_montant" min="0.00" step="0.01" name="montant" required/></dd>
+            <dt><label>Mode de paiement</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd>
+                <input type="radio" name="paiement" id="rb_especes" value="0" required/> <label for="rb_especes">Espèces</label><br>
+                <input type="radio" name="paiement" id="rb_cheque" value="1"/> <label for="rb_cheque">Chèque</label><br>
+                <input type="radio" name="paiement" id="rb_carte" value="2"/> <label for="rb_carte">Virement/Carte bancaire</label>   
+            </dd>
         </dl>
     </fieldset>
 

@@ -1,17 +1,17 @@
 <?php
 namespace Garradin;
 
+if ($user['droits']['compta'] < Membres::DROIT_ADMIN)
+{
+    throw new UserException("Vous n'avez pas le droit d'accéder à cette page.");
+}
+
 if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
     throw new UserException("Le numéro du reçu fiscal est manquant.");
 }
 
-if (isset($_GET['ok']))
-{
-    $error = 'OK';
-}
-
 $id = (int) $_GET['id'];
-$error = false;
+
 $gendon = new Plugin\RecuDon\GenDon;
 
 $recu = $gendon->get($id);
@@ -122,6 +122,3 @@ require_once(PLUGIN_ROOT . '/lib/FPDI/fpdi.php');
 	$pdf->Write(0, date('y'));
 	$pdf->Image(PLUGIN_ROOT . '/data/signature.png', 140, 247, 50 );	// Emplacement de la signature avec restriction de largeur pour tenir dans sur la case.
 	$pdf->Output("D",$recu['gen_ordre'].".pdf");
-
-	$tpl->assign('error', $error);
-	$tpl->display(PLUGIN_ROOT . '/templates/index.tpl');

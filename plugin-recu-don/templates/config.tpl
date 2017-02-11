@@ -93,12 +93,8 @@
     <fieldset>
         <legend>Signature du responsable</legend>
         <dl>
-            <dt>
-                <label>
-                Signature en base64
-                    <input type="text" name="signaturetxt" value="{form_field name=signaturetxt data=$plugin.config }" />
-                </label>
-            </dt>
+            <dt><label>Signature en base64</label>
+            <dd><input type="text" name="signaturetxt" value="{form_field name=signaturetxt data=$plugin.config }" /></dd>
         </dl>
     </fieldset>
 

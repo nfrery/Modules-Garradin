@@ -17,7 +17,7 @@
 {if !empty($trecus)}
     <p>Retrouvez l'ensemble des reçus fiscaux générés:</p>
     <table class="list">
-        <thead class="userOrder">
+        <thead>
             <tr>
                 <td title="Numéro unique"></td>
                 <td>Nom</td>
@@ -26,6 +26,7 @@
                 <td>Montant</td>
                 <td>Date</td>
                 <td>Télécharger</td>
+                <td></td>
             </tr>
         </thead>
         <tbody>
@@ -38,6 +39,9 @@
             <td>{$gendon.montant|escape}</td>
             <td>{$gendon.date|escape}</td>
             <td><a href="{plugin_url file="generation.php"}?id={$gendon.id}">{$gendon.gen_ordre|escape}.pdf</a></td>
+            <td class="action">
+                <a class="icn" href="{plugin_url file="supprimer.php"}?id={$gendon.id|escape}" title="Supprimer">✘</a>
+            </td>
         </tr>
         {/foreach}
         </tbody>

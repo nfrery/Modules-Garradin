@@ -1,4 +1,5 @@
 {include file="admin/_head.tpl" title="Configuration — `$plugin.nom`" current="plugin_`$plugin.id`"}
+{include file="`$plugin_root`/templates/_menu.tpl" current="recu"}
 
 {if $error}
     {if $error == 'OK'}

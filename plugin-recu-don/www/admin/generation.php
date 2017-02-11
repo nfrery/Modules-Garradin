@@ -1,6 +1,21 @@
 <?php
 namespace Garradin;
 
+if (empty($_GET['id']) || !is_numeric($_GET['id'])) {
+    throw new UserException("Le numéro du reçu fiscal est manquant.");
+}
+
+if (isset($_GET['ok']))
+{
+    $error = 'OK';
+}
+
+$id = (int) $_GET['id'];
+$error = false;
+$gendon = new Plugin\RecuDon\GenDon;
+
+$recu = $gendon->get($id);
+
 require_once(PLUGIN_ROOT . '/lib/fpdf/fpdf.php');
 require_once(PLUGIN_ROOT . '/lib/FPDI/pdf_context.php');
 require_once(PLUGIN_ROOT . '/lib/FPDI/pdf_parser.php');
@@ -18,7 +33,7 @@ require_once(PLUGIN_ROOT . '/lib/FPDI/fpdi.php');
 	$pdf->SetFont('Helvetica');
 	$pdf->SetTextColor(0);
 	$pdf->SetXY(170,18);
-	$pdf->Write(0, '00001');
+	$pdf->Write(0, $recu['gen_ordre']);
 	$pdf->SetXY(20, 42);
 	$pdf->Write(0, $config->get('nom_asso'));
 	$pdf->SetXY(24,53);
@@ -43,25 +58,27 @@ require_once(PLUGIN_ROOT . '/lib/FPDI/fpdi.php');
 	$pdf->useTemplate($tplIdx);
 
 	$pdf->SetXY(18,25);
-	$pdf->Write(0, "Anne");
+	$pdf->Write(0, $recu['nom']);
 	$pdf->SetXY(108,25);
-	$pdf->Write(0, "Onyme");
+	$pdf->Write(0, $recu['prenom']);
 	$pdf->SetXY(18,38);
-	$pdf->Write(0, utf8_decode("43 rue du Fillon"));
+	$pdf->Write(0, utf8_decode($recu['adresse']));
 	$pdf->SetXY(38,44);
-	$pdf->Write(0, "10000");
+	$pdf->Write(0, $recu['codepostal']);
 	$pdf->SetXY(78,44);
-	$pdf->Write(0, utf8_decode("Troyes"));
+	$pdf->Write(0, utf8_decode($recu['ville']));
 	$pdf->SetXY(85,69);	// Somme en chiffre
-	$pdf->Write(0, utf8_decode("***5000***"));
+	$pdf->Write(0, utf8_decode("***".$recu['montant']."***"));
 	$pdf->SetXY(58,79);	// Somme en toute lettre
-	$pdf->Write(0, utf8_decode(numfmt_create('fr_FR', \NumberFormatter::SPELLOUT)->format(5000)) . ' euros');
+	$pdf->Write(0, utf8_decode(numfmt_create('fr_FR', \NumberFormatter::SPELLOUT)->format($recu['montant'])) . ' euros');
+	$date = date_parse($recu['date']);
+
 	$pdf->SetXY(70,88);	// Jour du don
-	$pdf->Write(0, "01");
+	$pdf->Write(0, $date['day']);
 	$pdf->SetXY(81,88);	// Mois du don
-	$pdf->Write(0, "01");
+	$pdf->Write(0, $date['month']);
 	$pdf->SetXY(97,88);	// Année du don
-	$pdf->Write(0, "1970");
+	$pdf->Write(0, $date['year']);
 	if($plugin->getConfig('droit_art200')){
 		$pdf->SetXY(56.5,103);	// 200
 		$pdf->Write(0, "X");
@@ -78,17 +95,33 @@ require_once(PLUGIN_ROOT . '/lib/FPDI/fpdi.php');
 	$pdf->Write(0, "X");
 	$pdf->SetXY(19,142.5);	// Numéraire
 	$pdf->Write(0, "X");
-	$pdf->SetXY(19,165);	// Remise d'espèces
-	$pdf->Write(0, "X");
-	$pdf->SetXY(61.5,165);	// Chèque
-	$pdf->Write(0, "X");
-	$pdf->SetXY(119,165);	// Virement, prélèvement, carte bancaire
-	$pdf->Write(0, "X");
+	switch ($recu['mode_paiement']){
+		case 0:
+			$pdf->SetXY(19,165);	// Remise d'espèces
+			$pdf->Write(0, "X");
+			break;
+
+		case 1:
+			$pdf->SetXY(61.5,165);	// Chèque
+			$pdf->Write(0, "X");
+			break;
+
+		case 2:
+			$pdf->SetXY(119,165);	// Virement, prélèvement, carte bancaire
+			$pdf->Write(0, "X");
+			break;
+	}
+	
+	
+	
 	$pdf->SetXY(143,245);	// Jour de l'édition du document
-	$pdf->Write(0, "01");
+	$pdf->Write(0, date('d'));
 	$pdf->SetXY(151,245);	// Mois de l'édition du document
-	$pdf->Write(0, "01");
+	$pdf->Write(0, date('m'));
 	$pdf->SetXY(158,245);	// Année de l'édition du document
-	$pdf->Write(0, "1970");
+	$pdf->Write(0, date('y'));
 	$pdf->Image(PLUGIN_ROOT . '/data/signature.png', 140, 247, 50 );	// Emplacement de la signature avec restriction de largeur pour tenir dans sur la case.
-	$pdf->Output();
+	$pdf->Output("D",$recu['gen_ordre'].".pdf");
+
+	$tpl->assign('error', $error);
+	$tpl->display(PLUGIN_ROOT . '/templates/index.tpl');

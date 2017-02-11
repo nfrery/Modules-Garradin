@@ -90,6 +90,18 @@
         </dl>
     </fieldset>
 
+    <fieldset>
+        <legend>Signature du responsable</legend>
+        <dl>
+            <dt>
+                <label>
+                Signature en base64
+                    <input type="text" name="signaturetxt" value="{form_field name=signaturetxt data=$plugin.config }" />
+                </label>
+            </dt>
+        </dl>
+    </fieldset>
+
     <p class="submit">
         {csrf_field key="config_plugin_`$plugin.id`"}
         <input type="submit" name="save" value="Enregistrer &rarr;" />

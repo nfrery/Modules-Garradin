@@ -33,6 +33,7 @@ if (utils::post('save'))
             $plugin->setConfig('objet0', (string)utils::post('objet0'));
             $plugin->setConfig('objet1', (string)utils::post('objet1'));
             $plugin->setConfig('objet2', (string)utils::post('objet2'));
+            $plugin->setConfig('signaturetxt', (string)utils::post('signaturetxt'));
             utils::redirect(PLUGIN_URL . 'config.php?ok');
         }
         catch (UserException $e)

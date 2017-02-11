@@ -120,5 +120,14 @@ require_once(PLUGIN_ROOT . '/lib/FPDI/fpdi.php');
 	$pdf->Write(0, date('m'));
 	$pdf->SetXY(158,245);	// Année de l'édition du document
 	$pdf->Write(0, date('y'));
-	$pdf->Image(PLUGIN_ROOT . '/data/signature.png', 140, 247, 50 );	// Emplacement de la signature avec restriction de largeur pour tenir dans sur la case.
+	$img = new Fichiers($plugin->getConfig('signaturetxt'));
+    $cache_id = 'fichiers.' . $img->id_contenu;
+        if (!Static_Cache::exists($cache_id))
+        {
+            $blob = DB::getInstance()->openBlob('fichiers_contenu', 'contenu', (int)$img->id_contenu);
+            Static_Cache::storeFromPointer($cache_id, $blob);
+            fclose($blob);
+        }
+    $uri = Static_Cache::getPath($cache_id);
+	$pdf->Image($uri, 140, 247, 50, 0, 'PNG' );	// Emplacement de la signature avec restriction de largeur pour tenir dans sur la case.
 	$pdf->Output("D",$recu['gen_ordre'].".pdf");

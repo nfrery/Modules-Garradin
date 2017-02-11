@@ -56,14 +56,9 @@
     </fieldset>
 
     <p class="submit">
-        {csrf_field key="new_cat"}
+        {csrf_field key="new_recu"}
         <input type="submit" name="save" value="Créer le reçu &rarr;"/>
     </p>
 </form>
-
-<a href="{plugin_url file="generation.php"}">Générer le pdf</a>
-<br>
-<a href="{plugin_url file="config.php"}">Configuration du plugin</a>
-
 
 {include file="admin/_foot.tpl"}

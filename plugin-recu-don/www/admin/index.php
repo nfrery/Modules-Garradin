@@ -11,7 +11,7 @@ if ($user['droits']['config'] < Membres::DROIT_ADMIN)
 }
 
 if (!empty($_POST['save'])) {
-    if (!Utils::CSRF_check('new_cat')) {
+    if (!Utils::CSRF_check('new_recu')) {
         $error = 'Une erreur est survenue, merci de renvoyer le formulaire.';
     } else {
         try {

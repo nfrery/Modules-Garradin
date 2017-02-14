@@ -1,3 +1,10 @@
 {
-	"enable": true,
+	"enable": false,
+	"bdd_type":"mysqli",
+	"bdd_host":"",
+	"bdd_login":"",
+	"bdd_passwd":"",
+	"bdd_table":"fluxbb_",
+	"bdd_name":"",
+	"bdd_group":""
 }

@@ -122,7 +122,6 @@ class SQL
         // Je récupère les infos du membre sur garradin
         $mb = new Membres();
         $membre_garradin = $mb->get($id);
-        $config = Config::getInstance();
         $db = DB::getInstance();
         $bdd = SQL::connexion();
         $plugin = new \Garradin\Plugin('fluxbb');
@@ -166,12 +165,26 @@ class SQL
         
     }
 
+    public function listeAdherentsSansCompteFluxBB(){
+        $mb = new Membres();
+        $membre_garradin = $mb->get($id);
+        $db = DB::getInstance();
+        $bdd = SQL::connexion();
+        $plugin = new \Garradin\Plugin('fluxbb');
 
+        $requete = "SELECT id, username FROM ";
+        $requete .= $plugin->getConfig('bdd_table')."users ";
+        $requete .= "WHERE email=";
+        $requete .= "'".$membre_garradin['email']."';";
+        $curseur = mysqli_query($bdd, $requete);
+        $data = mysqli_fetch_assoc($curseur);
+
+        return $liste;
+    }
 
     public function editManuel($id){
         $mb = new Membres();
         $membre_garradin = $mb->get($id);
-        $config = Config::getInstance();
         $db = DB::getInstance();
         $bdd = SQL::connexion();
         $plugin = new \Garradin\Plugin('fluxbb');

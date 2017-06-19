@@ -1,6 +1,6 @@
 <?php
 
-namespace DrewM\MailChimp;
+namespace Garradin\Plugin\MailChimp;
 
 /**
  * Super-simple, minimum abstraction MailChimp API v3 wrapper

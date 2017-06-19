@@ -30,6 +30,7 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 * plugin-vote: module qui permet d'organiser des votes lors d'AGO et d'AGE. Chaque membre à jour de cotisation peut voter. Seul les membres d'un group défini par l'admin peuvent gérer les votes.
 * plugin-categorie: Sert à fixer une catégorie à une saisie avancée en compta. Permet d'inclure la saisie dans les dépenses ou les recettes.
 * plugin-bicycode: permet la tenue du registre.
+* plugin-mailchimp: gestion d'une liste sur mailchimp.
 
 
 ## Versionnement

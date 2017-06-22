@@ -22,6 +22,8 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 
 * plugin-test: plugin fourni par Garradin comme exmple pour le développement
 * plugin-recu-don: module permettant de remplir le cerfa 11580*03 pour permettre la déduction fiscale d'un don.
+* plugin-mailchimp: gestion d'une liste sur mailchimp. Fonctionne avec Garradin >=0.8.0.
+
 
 ## Liste des modules à faire
 
@@ -30,7 +32,6 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 * plugin-vote: module qui permet d'organiser des votes lors d'AGO et d'AGE. Chaque membre à jour de cotisation peut voter. Seul les membres d'un group défini par l'admin peuvent gérer les votes.
 * plugin-categorie: Sert à fixer une catégorie à une saisie avancée en compta. Permet d'inclure la saisie dans les dépenses ou les recettes.
 * plugin-bicycode: permet la tenue du registre.
-* plugin-mailchimp: gestion d'une liste sur mailchimp.
 
 
 ## Versionnement

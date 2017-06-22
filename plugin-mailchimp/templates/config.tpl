@@ -28,7 +28,7 @@ Quand la case sera cochée sur la fiche d'un membre, celui-ci se retrouvera insc
             <dd>
                 <select name="id_list" id="f_id_list" required="required">
                 {foreach from=$listes item=v}
-                        <option value="{$v.id|escape}" {form_field data=$plugin.config name=id_list}>{$v.name|escape}</option>
+                        <option value="{$v.id|escape}" {if $plugin.config.id_list == $v.id}selected="selected"{/if}>{$v.name|escape}</option>
                 {/foreach}
                 </select>
             </dd>
@@ -37,10 +37,12 @@ Quand la case sera cochée sur la fiche d'un membre, celui-ci se retrouvera insc
             <dd>
             	<select name="id_formulaire" id="f_id_formulaire" required="required">
                 {foreach from=$formulaires item="formulaire" key="nom"}
-                    <option value="{$nom|escape}" {form_field data=$plugin.config name=id_formulaire}>{$nom|escape}</option>
+                    <option value="{$nom|escape}" {if $plugin.config.id_formulaire == $nom}selected="selected"{/if}>{$nom|escape}</option>
                 {/foreach}
                 </select>
             </dd>
+            <dt><label for="f_del_membre">Supprimer le mail d'un membre à la suppression de son compte</label><b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd><input type="checkbox" id="f_del_membre" name="del_membre" value="1" {form_field name="del_membre" checked=1 data=$plugin.config} /></dd>
         </dl>
     </fieldset>
     <p class="submit">

@@ -56,6 +56,7 @@ if (utils::post('save'))
             $plugin->setConfig('id_list', (string)utils::post('id_list'));
             $plugin->setConfig('key_api', (string)utils::post('key_api'));
             $plugin->setConfig('id_formulaire', (string)utils::post('id_formulaire'));
+            $plugin->setConfig('del_membre', (bool)utils::post('del_membre'));
             utils::redirect(PLUGIN_URL . 'config.php?ok');
         }
         catch (UserException $e)

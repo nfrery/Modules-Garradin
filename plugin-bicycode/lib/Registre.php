@@ -31,15 +31,19 @@ class Registre
 
     }
 
-    public function getBicycode($code = "")
+    public function getBicycode($code = NULL)
     {
         $db = DB::getInstance(true);
-        if(isset($code))
+
+        if($code == !NULL)
         {
-            return $db->simpleQuerySingle('SELECT * FROM plugin_bicycode WHERE id = ?;', true, (int) $code);
+            $requete = "SELECT * FROM plugin_bicycode WHERE id = ".(int)$code;
         }
-        return $db->simpleQuerySingle('SELECT * FROM plugin_bicycode;',
-            true);
+        else
+        {
+            $requete = "SELECT * FROM plugin_bicycode";
+        }
+        return $db->queryFetch($requete);
     }
 
 }

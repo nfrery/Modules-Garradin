@@ -13,5 +13,6 @@
     {/if}
 {/if}
 
+<p>Partie à venir (configuration de votre code Bicycode et listage des numéros encore disponibles)</p>
 
 {include file="admin/_foot.tpl"}

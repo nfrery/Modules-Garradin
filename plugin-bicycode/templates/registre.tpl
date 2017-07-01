@@ -9,13 +9,23 @@
         <col width="12%" />
         <col width="10%" />
     </colgroup>
-    <tbody>
-    {foreach from=$liste item=v}
+    <thead>
         <tr>
-            <td class="num">{$v.numero_bicycode|escape}</td>
-            <td>{$v.nom|escape}</td>
-            <td></td>
-            <td></td>
+            <th>Numéro Bicycode</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Numéro pièce d'identité</th>
+            <th>Date de marquage</th>
+        </tr>
+    </thead>
+    <tbody>
+    {foreach from=$liste item="marquage"}
+        <tr>
+            <td class="num">{$marquage.numero_bicycode}</td>
+            <td>{$marquage.nom}</td>
+            <td>{$marquage.prenom}</td>
+            <td>{$marquage.numero_piece_identite}</td>
+            <td>{$marquage.date_marquage}</td>
         </tr>
         {foreachelse}
         <tr>
@@ -26,14 +36,6 @@
         </tr>
     {/foreach}
     </tbody>
-    <tfoot>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    </tfoot>
 </table>
 
 

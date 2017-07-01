@@ -18,10 +18,8 @@ class Registre
 
     }
 
-    public function addBicycode($code)
+    public function addBicycode($data)
     {
-        $data = "";
-
         $db = DB::getInstance(true);
         $db->simpleInsert('plugin_bicycode', $data);
     }

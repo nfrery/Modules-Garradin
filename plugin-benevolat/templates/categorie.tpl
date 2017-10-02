@@ -24,7 +24,7 @@
                 <a class="icn" href="{plugin_url file="cat_voir.php"}?id={$benevolat.id|escape}" title="Voir les enregistrements">𝍢</a>
                 {if $user.droits.membres >= Garradin\Membres::DROIT_ADMIN}
                     <a class="icn" href="{plugin_url file="cat_modifier.php"}?id={$benevolat.id|escape}" title="Modifier">✎</a>
-                    <a class="icn" href=""{plugin_url file="cat_supprimer.php"}?id={$benevolat.id|escape}"" title="Supprimer">✘</a>
+                    <a class="icn" href="{plugin_url file="cat_supprimer.php"}?id={$benevolat.id|escape}" title="Supprimer">✘</a>
                 {/if}
             </td>
         </tr>

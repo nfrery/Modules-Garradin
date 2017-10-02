@@ -4,6 +4,9 @@
 {if $error}
     <p class="error">{$error|escape}</p>
 {/if}
+{if $ok}
+    <p class="confirm">{$ok|escape}</p>
+{/if}
 
 <table class="list">
     <caption>Les 5 dernières contributions ajoutées</caption>

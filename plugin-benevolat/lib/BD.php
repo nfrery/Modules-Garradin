@@ -9,6 +9,7 @@
 namespace Garradin\Plugin\Benevolat;
 
 use Garradin\DB;
+use Garradin\UserException;
 
 class BD
 {
@@ -23,9 +24,11 @@ class BD
         $db->simpleInsert('plugin_benevolat_enregistrement', $data);
     }
 
-    public function removeBenevolat($data)
+    public function removeBenevolat($id)
     {
-
+        $db = DB::getInstance();
+        $db->simpleExec("DELETE FROM plugin_benevolat_enregistrement WHERE id = ?;",(int)$id);
+        return true;
     }
 
     public function addCategorie($data)
@@ -34,9 +37,34 @@ class BD
         $db->simpleInsert('plugin_benevolat_categorie', $data);
     }
 
-    public function removeCategorie($data)
+    public function removeCategorie($id)
     {
+        $db = DB::getInstance();
 
+        if($db->simpleQuerySingle('SELECT 1 FROM plugin_benevolat_enregistrement WHERE id_categorie = ? LIMIT 1;',false, $id))
+        {
+            throw new UserException('Cette catégorie ne peut être supprimée car des contributions bénévoles y sont associées.');
+        }
+
+        $db->simpleExec("DELETE FROM plugin_benevolat_categorie WHERE id = ?;",(int)$id);
+        return true;
+    }
+
+    public function getEnregistrement($id)
+    {
+        $db = DB::getInstance();
+        return $db->simpleQuerySingle("SELECT ben.*,
+            (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
+            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom,
+            (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
+            (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie
+            FROM plugin_benevolat_enregistrement AS ben WHERE id = :id;", true, $id);
+    }
+
+    public function getCategorie($id)
+    {
+        $db = DB::getInstance();
+        return $db->simpleQuerySingle("SELECT * FROM plugin_benevolat_categorie WHERE id = :id;", true, $id);
     }
 
     public function getEnregistrements()

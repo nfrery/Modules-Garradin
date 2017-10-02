@@ -25,9 +25,12 @@ if (isset($_GET['q'])) {
     exit;
 }
 
+
+
 $benevolat = new Plugin\Benevolat\BD();
 
 $error = false;
+$ok = false;
 
 if (!empty($_POST['add']))
 {
@@ -57,7 +60,18 @@ if (!empty($_POST['add']))
     }
 }
 
+if(isset($_GET['suppr_contrib_ok']))
+{
+    $ok = "Contribution supprimée.";
+}
+
+if(isset($_GET['suppr_cat_ok']))
+{
+    $ok = "Catégorie supprimée.";
+}
+
 $tpl->assign('error', $error);
+$tpl->assign('ok', $ok);
 $tpl->assign('liste_ben', $benevolat->getLastsEnregistrements());
 $tpl->assign('liste_cat', $benevolat->getListeCategories());
 $tpl->display(PLUGIN_ROOT . '/templates/index.tpl');

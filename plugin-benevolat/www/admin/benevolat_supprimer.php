@@ -9,18 +9,18 @@ if ($user['droits']['membres'] < Membres::DROIT_ECRITURE)
 
 $benevolat = new Plugin\Benevolat\BD();
 
-$categorie = $benevolat->getCategorie((int)Utils::get('id'));
+$contribution = $benevolat->getEnregistrement((int)Utils::get('id'));
 
-if(empty($categorie))
+if(empty($contribution))
 {
-    throw new UserException('Categorie inexistante.');
+    throw new UserException('Contribution inexistante.');
 }
 
 $error = false;
 
 if (!empty($_POST['delete']))
 {
-    if (!Utils::CSRF_check('cat_supprimer_'.$categorie['id']))
+    if (!Utils::CSRF_check('ben_supprimer_'.$contribution['id']))
     {
         $error = 'Une erreur est survenue, merci de renvoyer le formulaire.';
     }
@@ -28,8 +28,8 @@ if (!empty($_POST['delete']))
     {
         try
         {
-            $benevolat->removeCategorie($categorie['id']);
-            utils::redirect(PLUGIN_URL . 'index.php?suppr_cat_ok');
+            $benevolat->removeBenevolat($contribution['id']);
+            utils::redirect(PLUGIN_URL . 'index.php?suppr_contrib_ok');
         }
         catch (UserException $e)
         {
@@ -39,5 +39,5 @@ if (!empty($_POST['delete']))
 }
 
 $tpl->assign('error', $error);
-$tpl->assign('categorie', $categorie);
-$tpl->display(PLUGIN_ROOT . '/templates/cat_supprimer.tpl');
+$tpl->assign('contribution', $contribution);
+$tpl->display(PLUGIN_ROOT . '/templates/benevolat_supprimer.tpl');

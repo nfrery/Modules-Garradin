@@ -10,8 +10,7 @@
     <fieldset>
         <legend>Supprimer une catégorie</legend>
         <h3 class="warning">
-            Êtes-vous sûr de vouloir supprimer l'exercice «&nbsp;{$exercice.libelle|escape}&nbsp;»
-            du {$exercice.debut|date_fr:'d/m/Y'} au {$exercice.fin|date_fr:'d/m/Y'} ?
+            Êtes-vous sûr de vouloir supprimer la catégorie «&nbsp;{$categorie.nom|escape}&nbsp;» ?
         </h3>
         <p class="help">
             Attention, la catégorie ne pourra pas être supprimée si des heures de bénévolat y sont
@@ -20,7 +19,7 @@
     </fieldset>
 
     <p class="submit">
-        {csrf_field key="cat_supprimer_`$cat.id`"}
+        {csrf_field key="cat_supprimer_`$categorie.id`"}
         <input type="submit" name="delete" value="Supprimer &rarr;" />
     </p>
 

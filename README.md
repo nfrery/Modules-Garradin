@@ -25,6 +25,7 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 ## Liste des modules en cours de réalisation
 * plugin-bicycode: permet la tenue du registre pour les opérateurs bicycode. Pour plus d'info sur ce service [bicycode.org](https://www.bicycode.org/le-bicycode.rub-2/qu-est-ce-que-c-est.rub-68/).
 * plugin-cotisation-avancee: Permet une saisie avancée lors de l'enregistrement d'une cotisation. Prend en compte les prestataires de services (467x) tel que iZettle, HelloAsso, etc pour ne pas débiter directement le compte courant (512x) de l'association. Il enregistre les chèques comme étant à encaisser (5112).
+* plugin-benevolat: Permettre l'enregistrement des heures de bénévolat facilement et proposer un récapitulatif annuel.
 
 ## Liste des modules au stade d'idées
 

@@ -5,6 +5,10 @@
     <p class="error">{$error|escape}</p>
 {/if}
 
+{if $ok}
+    <p class="confirm">{$ok|escape}</p>
+{/if}
+
 <table class="list">
     <thead>
     <th>Intitulé</th>

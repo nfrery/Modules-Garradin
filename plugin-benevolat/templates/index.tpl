@@ -52,7 +52,7 @@
             <dl>
                 <dt><label for="f_membre">Personne bénévole</label></dt>
                 <dd>
-                    <input list="lst_membre" type="text" id="f_membre" autocomplete="off" required="required" placeholder="Entrer les premières lettres du nom ou du prénom" size="50">
+                    <input list="lst_membre" type="text" id="f_membre" autocomplete="off" required="required" placeholder="Entrer les premières lettres du nom ou du prénom" size="50" >
                     <datalist id="lst_membre">
                     </datalist>
                     <input type="hidden" name="id_membre" id="f_membre-hidden">
@@ -90,6 +90,8 @@
 <script type="text/javascript" src="{$admin_url}static/scripts/global.js"></script>
 <script type="text/javascript" src="{$admin_url}static/scripts/datepickr.js"></script>
 <link rel="stylesheet" type="text/css" href="{$admin_url}static/scripts/datepickr.css" />
+
+{*Merci au créateur de plugin-matos pour cette partie*}
 {literal}
 <script type="text/javascript">
 

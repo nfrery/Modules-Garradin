@@ -35,7 +35,7 @@
                 {/if}
             </td>
             <td class="actions">
-                <a class="icn" href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id|escape}" title="Voir les enregistrements">𝍢</a>
+                <a class="icn" href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id|escape}" title="Voir les détails de la contribution.">𝍢</a>
                 {if $user.droits.membres >= Garradin\Membres::DROIT_ADMIN}
                     <a class="icn" href="{plugin_url file="benevolat_modifier.php"}?id={$benevolat.id|escape}" title="Modifier">✎</a>
                     <a class="icn" href="{plugin_url file="benevolat_supprimer.php"}?id={$benevolat.id|escape}" title="Supprimer">✘</a>

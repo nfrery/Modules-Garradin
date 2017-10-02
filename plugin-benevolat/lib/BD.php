@@ -37,6 +37,13 @@ class BD
         $db->simpleInsert('plugin_benevolat_categorie', $data);
     }
 
+    public function editCategorie($id, $data)
+    {
+        $db = DB::getInstance();
+        $db->simpleUpdate('plugin_benevolat_categorie', $data, 'id = \''.trim($id).'\'');
+        return true;
+    }
+
     public function removeCategorie($id)
     {
         $db = DB::getInstance();

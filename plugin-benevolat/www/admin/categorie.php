@@ -2,16 +2,15 @@
 
 namespace Garradin;
 
-use Garradin\Plugin\Benevolat\BD;
-
 if ($user['droits']['membres'] < Membres::DROIT_ECRITURE)
 {
     throw new UserException("Vous n'avez pas le droit d'accéder à cette page.");
 }
 
-$benevolat = new BD();
+$benevolat = new Plugin\Benevolat\BD();
 
 $error = false;
+$ok = false;
 
 if (!empty($_POST['add']))
 {
@@ -29,6 +28,7 @@ if (!empty($_POST['add']))
             ];
 
             $benevolat->addCategorie($data);
+            utils::redirect(PLUGIN_URL . 'categorie.php?add_cat_ok');
         }
         catch (UserException $e)
         {
@@ -37,6 +37,17 @@ if (!empty($_POST['add']))
     }
 }
 
+if(isset($_GET['edit_cat_ok']))
+{
+    $ok = "Catégorie éditée avec succès.";
+}
+if(isset($_GET['add_cat_ok']))
+{
+    $ok = "Catégorie ajoutée avec succès.";
+}
+
+
 $tpl->assign('error', $error);
+$tpl->assign('ok', $ok);
 $tpl->assign('liste', $benevolat->getListeCategories());
 $tpl->display(PLUGIN_ROOT . '/templates/categorie.tpl');

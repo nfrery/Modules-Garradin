@@ -52,6 +52,7 @@ if (!empty($_POST['add']))
             ];
 
             $benevolat->addBenevolat($data);
+            utils::redirect(PLUGIN_URL . 'index.php?add_ben_ok');
         }
         catch (UserException $e)
         {
@@ -68,6 +69,11 @@ if(isset($_GET['suppr_contrib_ok']))
 if(isset($_GET['suppr_cat_ok']))
 {
     $ok = "Catégorie supprimée.";
+}
+
+if(isset($_GET['add_ben_ok']))
+{
+    $ok = "Contribution ajoutée avec succès.";
 }
 
 $tpl->assign('error', $error);

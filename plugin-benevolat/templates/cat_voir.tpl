@@ -22,7 +22,7 @@
             {else}
                 <th>{$benevolat.nom_prenom|escape}</th>
             {/if}
-            <td>{$benevolat.date|date_fr:'d/m/Y'|escape}</td>
+            <td>{$benevolat.date|escape}</td>
             <td class="num">{$benevolat.heures|escape}</td>
             <td class="num">{$benevolat.taux_horaire|html_money} {$config.monnaie|escape}/h</td>
             <td>{$benevolat.description}</td>

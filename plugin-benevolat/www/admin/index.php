@@ -48,7 +48,7 @@ if (!empty($_POST['add']))
                 'heures'           =>  Utils::post('heure'),
                 'id_categorie'    =>  Utils::post('id_categorie'),
                 'description'     =>  Utils::post('description'),
-                'id_membre_ajout'     =>  '1',
+                'id_membre_ajout'     =>  $user['id'],
             ];
 
             $benevolat->addBenevolat($data);

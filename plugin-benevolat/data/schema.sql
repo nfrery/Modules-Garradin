@@ -2,6 +2,7 @@
 CREATE TABLE IF NOT EXISTS `plugin_benevolat_enregistrement` (
   `id`              INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
   `id_membre_ajout` INTEGER NOT NULL,
+  `id_membre_modif` INTEGER,
   `id_compta`       INTEGER UNIQUE,
   `id_categorie`    INTEGER NOT NULL,
   `id_exercice`    INTEGER NOT NULL,
@@ -20,3 +21,12 @@ CREATE TABLE IF NOT EXISTS `plugin_benevolat_categorie` (
   `description`  TEXT,
   `activer`      INTEGER             DEFAULT 1
 );
+
+-- Exemple de catégorie à utiliser
+
+INSERT INTO `plugin_benevolat_categorie`(`id`,`nom`,`taux_horaire`,`description`)
+    VALUES (NULL,'Non-qualifé','7','Saisie, transport, relecture, distribution, …');
+INSERT INTO `plugin_benevolat_categorie`(`id`,`nom`,`taux_horaire`,`description`)
+    VALUES (NULL,'Qualifié','13','Animation, rédaction, recherche documentaire, …');
+INSERT INTO `plugin_benevolat_categorie`(`id`,`nom`,`taux_horaire`,`description`)
+    VALUES (NULL,'Expert','18','Développement, administration, création graphique, …');

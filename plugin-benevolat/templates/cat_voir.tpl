@@ -11,6 +11,7 @@
     <td>Date</td>
     <td>Heures</td>
     <td>Taux horaire</td>
+    <td>Valorisé</td>
     <td>Activité(s)</td>
     <td></td>
     </thead>
@@ -25,6 +26,7 @@
             <td>{$benevolat.date|escape}</td>
             <td class="num">{$benevolat.heures|escape}</td>
             <td class="num">{$benevolat.taux_horaire|html_money} {$config.monnaie|escape}/h</td>
+            <td class="num">{$benevolat.valorise|html_money} {$config.monnaie|escape}</td>
             <td>{$benevolat.description}</td>
             <td class="actions">
                 {if $user.droits.membres >= Garradin\Membres::DROIT_ADMIN}

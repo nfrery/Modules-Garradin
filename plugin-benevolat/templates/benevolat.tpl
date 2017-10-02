@@ -13,6 +13,7 @@
     <td>Heures</td>
     <td>Taux horaire</td>
     <td>Catégorie</td>
+    <td>Valorisé</td>
     <td>Activité(s)</td>
     <td></td>
     </thead>
@@ -29,6 +30,7 @@
             <td class="num">{$benevolat.heures|escape}</td>
             <td class="num">{$benevolat.taux_horaire|html_money} {$config.monnaie|escape}/h</td>
             <td>{$benevolat.categorie|escape}</td>
+            <td class="num">{$benevolat.valorise|html_money} {$config.monnaie|escape}</td>
             <td>{$benevolat.description_courte}
                 {if strlen($benevolat.description) >= 30}
                     …

@@ -10,22 +10,22 @@
         <dl>
             <dt><label for="f_membre">Personne bénévole</label></dt>
             <dd>
-                <input list="lst_membre" type="text" id="f_membre" autocomplete="off" required="required" placeholder="Entrer les premières lettres du nom ou du prénom" size="50">
+                <input list="lst_membre" type="text" id="f_membre" autocomplete="off" required="required" placeholder="Entrer les premières lettres du nom ou du prénom" size="50" value="{form_field name=nom data=$contribution}">
                 <datalist id="lst_membre">
                 </datalist>
-                <input type="hidden" name="id_membre" id="f_membre-hidden">
+                <input type="hidden" name="id_membre" id="f_membre-hidden" value="{form_field name=id_membre data=$contribution}">
             </dd>
             <dt><label for="f_date">Date du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
-            <dd><input type="date" name="date" id="f_date"/></dd>
+            <dd><input type="date" name="date" id="f_date" value="{form_field name=date data=$contribution}"/></dd>
 
             <dt><label for="f_heure">Temps de bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
-            <dd><input type="number" step="0.25" min="0" name="heure" placeholder="Durée en heure" id="f_heure"/></dd>
+            <dd><input type="number" step="0.25" min="0" name="heure" placeholder="Durée en heure" id="f_heure" value="{form_field name=heures data=$contribution}"/></dd>
 
             <dt><label for="f_categorie">Catégorie du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
             <dl class="catList">
-                {foreach from=$liste_cat item="cat"}
+                {foreach from=$categories item="cat"}
                     <dt>
-                        <input type="radio" name="id_categorie" value="{$cat.id|escape}" id="f_cat_{$cat.id|escape}" {form_field name="id_categorie" checked=$cat.id} />
+                        <input type="radio" name="id_categorie" value="{$cat.id|escape}" id="f_cat_{$cat.id|escape}" {form_field name="id_categorie" checked=$cat.id data=$contribution} />
                         <label for="f_cat_{$cat.id|escape}">{$cat.nom|escape} à {$cat.taux_horaire}€/h</label>
                     </dt>
                     {if !empty($cat.description)}
@@ -35,12 +35,12 @@
             </dl>
 
             <dt><label for="f_description">Description de l'activité</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
-            <dd><textarea name="description" id="f_description" rows="4" cols="30">{form_field name=description}</textarea></dd>
+            <dd><textarea name="description" id="f_description" rows="4" cols="30" >{form_field name=description}</textarea></dd>
         </dl>
     </fieldset>
 
     <p class="submit">
-        {csrf_field key="add_benevolat"}
+        {csrf_field key="edit_contribution"}
         <input type="submit" name="add" value="Enregistrer &rarr;" />
     </p>
 </form>

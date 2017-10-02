@@ -21,11 +21,11 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 * plugin-test: plugin fourni par Garradin comme exmple pour le développement (>=0.1)
 * [plugin-recu-don](https://github.com/nfrery/Modules-Garradin/raw/master/release/recudon.tar.gz): module permettant de remplir le cerfa 11580*03 pour permettre la déduction fiscale d'un don. **Attention, ce plugin n'est pas abouti** (>=0.7.6)
 * [plugin-mailchimp](https://github.com/nfrery/Modules-Garradin/raw/master/release/mailchimp.tar.gz): gestion d'une liste sur mailchimp. Fonctionne avec Garradin >=0.8.0.
+* [plugin-benevolat](https://github.com/nfrery/Modules-Garradin/raw/master/release/benevolat.tar.gz): Valoriser facilement le bénévolat sur Garradin. >=0.7.7
 
 ## Liste des modules en cours de réalisation
 * plugin-bicycode: permet la tenue du registre pour les opérateurs bicycode. Pour plus d'info sur ce service [bicycode.org](https://www.bicycode.org/le-bicycode.rub-2/qu-est-ce-que-c-est.rub-68/).
 * plugin-cotisation-avancee: Permet une saisie avancée lors de l'enregistrement d'une cotisation. Prend en compte les prestataires de services (467x) tel que iZettle, HelloAsso, etc pour ne pas débiter directement le compte courant (512x) de l'association. Il enregistre les chèques comme étant à encaisser (5112).
-* plugin-benevolat: Permettre l'enregistrement des heures de bénévolat facilement et proposer un récapitulatif annuel.
 
 ## Liste des modules au stade d'idées
 

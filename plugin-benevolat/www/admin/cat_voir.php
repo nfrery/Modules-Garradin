@@ -11,15 +11,15 @@ if ($user['droits']['membres'] < Membres::DROIT_ECRITURE)
 
 $benevolat = new BD();
 
-$enregistrement = $benevolat->getEnregistrementsCategorie((int)Utils::get('id'));
+$enregistrements = $benevolat->getEnregistrementsCategorie((int)Utils::get('id'));
 
 $error = false;
 
-if($enregistrement == NULL)
+if($enregistrements == NULL)
 {
     $error = 'Catégorie inconnue ou sans enregistrement.';
 }
 
 $tpl->assign('error', $error);
-$tpl->assign('liste', $enregistrement);
+$tpl->assign('liste', $enregistrements);
 $tpl->display(PLUGIN_ROOT . '/templates/cat_voir.tpl');

@@ -15,8 +15,11 @@
                 </datalist>
                 <input type="hidden" name="id_membre" id="f_membre-hidden" value="{form_field name=id_membre data=$contribution}">
             </dd>
+            <dt><label for="f_plage">Contribution sur plusieurs jours</label> <input type="checkbox" name="plage" id="f_plage" {if $contribution.plage == 'on'}checked{/if}/></dt>
             <dt><label for="f_date">Date du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
-            <dd><input type="date" name="date" id="f_date" value="{form_field name=date data=$contribution}"/></dd>
+            <dd><input type="date" name="date" id="f_date" required="required" value="{form_field name=date data=$contribution}"/></dd>
+            <dt class="date_fin"><label for="f_date_fin">Date de fin du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
+            <dd class="date_fin"><input type="date" name="date_fin" id="f_date_fin" value="{form_field name=date_fin data=$contribution}"/></dd>
 
             <dt><label for="f_heure">Temps de bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
             <dd><input type="number" step="0.25" min="0" name="heure" placeholder="Durée en heure" id="f_heure" value="{form_field name=heures data=$contribution}"/></dd>
@@ -47,6 +50,31 @@
 <script type="text/javascript" src="{$admin_url}static/scripts/global.js"></script>
 <script type="text/javascript" src="{$admin_url}static/scripts/datepickr.js"></script>
 <link rel="stylesheet" type="text/css" href="{$admin_url}static/scripts/datepickr.css" />
+<script type="text/javascript">
+    {literal}
+    (function () {
+        window.changeTypeDuree = function()
+        {
+            var cb = $('#f_plage');
+            var elm = $('#f_date_fin');
+            if(cb.checked == true)
+            {
+                g.toggle('.date_fin', true);
+                elm.required = true;
+            }
+            else
+            {
+                g.toggle('.date_fin', false);
+                elm.required = false;
+            }
+        };
+
+        changeTypeDuree();
+
+        $('#f_plage').onchange = changeTypeDuree;
+    } ());
+    {/literal}
+</script>
 {literal}
 <script type="text/javascript">
 

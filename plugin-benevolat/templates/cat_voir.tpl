@@ -23,7 +23,12 @@
             {else}
                 <th>{$benevolat.nom_prenom|escape}</th>
             {/if}
-            <td>{$benevolat.date|escape}</td>
+            {if $benevolat.plage == 'on'}
+                <td>{$benevolat.date|escape} au<br>{$benevolat.date_fin}</td>
+            {else}
+                <td>{$benevolat.date|escape}</td>
+            {/if}
+
             <td class="num">{$benevolat.heures|escape}</td>
             <td class="num">{$benevolat.taux_horaire|html_money} {$config.monnaie|escape}/h</td>
             <td class="num">{$benevolat.valorise|html_money} {$config.monnaie|escape}</td>

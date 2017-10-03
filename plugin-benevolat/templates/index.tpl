@@ -29,7 +29,11 @@
             {else}
                 <th>{$benevolat.nom_prenom|escape}</th>
             {/if}
-            <td>{$benevolat.date|escape}</td>
+            {if $benevolat.plage == 'on'}
+                <td>{$benevolat.date|escape} au<br>{$benevolat.date_fin}</td>
+            {else}
+                <td>{$benevolat.date|escape}</td>
+            {/if}
             <td class="num">{$benevolat.heures|escape}</td>
             <td class="num">{$benevolat.taux_horaire|html_money} {$config.monnaie|escape}/h</td>
             <td>{$benevolat.categorie|escape}</td>
@@ -57,11 +61,13 @@
                     </datalist>
                     <input type="hidden" name="id_membre" id="f_membre-hidden">
                 </dd>
+                <dt><label for="f_plage">Contribution sur plusieurs jours</label> <input type="checkbox" name="plage" id="f_plage"/></dt>
                 <dt><label for="f_date">Date du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
                 <dd><input type="date" name="date" id="f_date" required="required"/></dd>
-
+                <dt class="date_fin"><label for="f_date_fin">Date de fin du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
+                <dd class="date_fin"><input type="date" name="date_fin" id="f_date_fin"/></dd>
                 <dt><label for="f_heure">Temps de bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
-                <dd><input type="number" step="0.25" min="0" name="heure" placeholder="Durée en heure" id="f_heure" required="required"/></dd>
+                <dd><input type="number" step="0.25" min="0" name="heure" placeholder="Durée en heure" id="f_heure"/></dd>
 
                 <dt><label for="f_categorie">Catégorie du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
                 <dl class="catList">
@@ -90,7 +96,31 @@
 <script type="text/javascript" src="{$admin_url}static/scripts/global.js"></script>
 <script type="text/javascript" src="{$admin_url}static/scripts/datepickr.js"></script>
 <link rel="stylesheet" type="text/css" href="{$admin_url}static/scripts/datepickr.css" />
+<script type="text/javascript">
+    {literal}
+    (function () {
+        window.changeTypeDuree = function()
+        {
+            var cb = $('#f_plage');
+            var elm = $('#f_date_fin');
+            if(cb.checked == true)
+            {
+                g.toggle('.date_fin', true);
+                elm.required = true;
+            }
+            else
+            {
+                g.toggle('.date_fin', false);
+                elm.required = false;
+            }
+        };
 
+        changeTypeDuree();
+
+        $('#f_plage').onchange = changeTypeDuree;
+    } ());
+    {/literal}
+</script>
 {*Merci au créateur de plugin-matos pour cette partie*}
 {literal}
 <script type="text/javascript">

@@ -45,6 +45,8 @@ if (!empty($_POST['add']))
                 'nom_prenom'              =>  Utils::post('nom_prenom'),
                 'id_membre'     =>  Utils::post('id_membre'),
                 'date'         =>  Utils::post('date'),
+                'date_fin'         =>  Utils::post('date_fin'),
+                'plage'         =>  Utils::post('plage'),
                 'heures'           =>  Utils::post('heure'),
                 'id_categorie'    =>  Utils::post('id_categorie'),
                 'description'     =>  Utils::post('description'),

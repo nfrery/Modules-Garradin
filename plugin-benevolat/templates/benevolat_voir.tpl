@@ -6,7 +6,11 @@
             <dt><label>Personne bénévole</label></dt>
             <dd>{$contribution.nom}</dd>
             <dt><label>Date du bénévolat</label></dt>
-            <dd>{$contribution.date}</dd>
+            {if $contribution.plage != '0'}
+                <dd>{$contribution.date|escape} au {$contribution.date_fin}</dd>
+            {else}
+                <dd>{$contribution.date|escape}</dd>
+            {/if}
             <dt><label>Temps de bénévolat</label></dt>
             <dd>{$contribution.heures} heures</dd>
             <dt><label>Catégorie du bénévolat</label></dt>

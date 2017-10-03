@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `plugin_benevolat_enregistrement` (
   `heures`          INTEGER NOT NULL,
   `description`     TEXT    NOT NULL,
   `date`            TEXT                DEFAULT CURRENT_DATE,
+  `plage`       TEXT,
   `date_fin`        TEXT
 );
 

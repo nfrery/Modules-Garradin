@@ -26,16 +26,16 @@
             {else}
                 <th>{$benevolat.nom_prenom|escape}</th>
             {/if}
-            <td>{$benevolat.date|escape}</td>
+            {if $benevolat.plage == 'on'}
+                <td>{$benevolat.date|escape} au<br>{$benevolat.date_fin}</td>
+            {else}
+                <td>{$benevolat.date|escape}</td>
+            {/if}
             <td class="num">{$benevolat.heures|escape}</td>
             <td class="num">{$benevolat.taux_horaire|html_money} {$config.monnaie|escape}/h</td>
             <td>{$benevolat.categorie|escape}</td>
             <td class="num">{$benevolat.valorise|html_money} {$config.monnaie|escape}</td>
-            <td>{$benevolat.description_courte}
-                {if strlen($benevolat.description) >= 30}
-                    …
-                {/if}
-            </td>
+            <td>{$benevolat.description_courte}{if strlen($benevolat.description) >= 30}…{/if}</td>
             <td class="actions">
                 <a class="icn" href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id|escape}" title="Voir les détails de la contribution.">𝍢</a>
                 {if $user.droits.membres >= Garradin\Membres::DROIT_ADMIN}

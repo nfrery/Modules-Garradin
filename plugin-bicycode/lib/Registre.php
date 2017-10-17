@@ -21,7 +21,7 @@ class Registre
     public function addBicycode($data)
     {
         $db = DB::getInstance(true);
-        $db->simpleInsert('plugin_bicycode', $data);
+        $db->insert('plugin_bicycode', $data);
     }
 
     public function delBicycode($code)
@@ -41,7 +41,7 @@ class Registre
         {
             $requete = "SELECT * FROM plugin_bicycode";
         }
-        return $db->queryFetch($requete);
+        return $db->get($requete);
     }
 
 }

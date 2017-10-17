@@ -1,5 +1,5 @@
-{include file="admin/_head.tpl" title="Donation — `$plugin.nom`" current="plugin_`$plugin.id`"}
-{include file="`$plugin_root`/templates/_menu.tpl" current="don"}
+{include file="admin/_head.tpl" title="Donation — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
+{include file="%s/templates/_menu.tpl"|args:$plugin_root current="index"}
 
 <h1>Vous aimez cette extension ?</h1>
 <p>Alors n'hésitez pas à nous soutenir pour que les membres de l'association <a href="https://troyesenselle.fr">Troyes en Selle</a> puissent continuer à maintenir et créer de nouvelles extensions pour Garradin.</p>

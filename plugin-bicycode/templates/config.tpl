@@ -1,17 +1,7 @@
-{include file="admin/_head.tpl" title="Configuration — `$plugin.nom`" current="plugin_`$plugin.id`"}
-{include file="`$plugin_root`/templates/_menu.tpl" current="config"}
+{include file="admin/_head.tpl" title="Configuration — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
+{include file="%s/templates/_menu.tpl"|args:$plugin_root current="config"}
 
-{if $error}
-    {if $error == 'OK'}
-        <p class="confirm">
-            La configuration a bien été enregistrée.
-        </p>
-    {else}
-        <p class="error">
-            {$error|escape}
-        </p>
-    {/if}
-{/if}
+{form_errors}
 
 <p>Partie à venir (configuration de votre code Bicycode et listage des numéros encore disponibles)</p>
 

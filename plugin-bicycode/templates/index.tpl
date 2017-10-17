@@ -1,11 +1,9 @@
-{include file="admin/_head.tpl" title="Extension — `$plugin.nom`" current="plugin_`$plugin.id`"}
-{include file="`$plugin_root`/templates/_menu.tpl" current="index"}
+{include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
+{include file="%s/templates/_menu.tpl"|args:$plugin_root current="index"}
 
-{if $error}
-    <p class="error">{$error|escape}</p>
-{/if}
+{form_errors}
 
-<form method="post" action="{$self_url|escape}">
+<form method="post" action="{$self_url}">
     <fieldset>
         <legend>Enregistrer un marquage</legend>
         <dl>

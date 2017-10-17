@@ -130,7 +130,7 @@
             dataList = document.querySelector("#" + list),
             hiddenInput = document.getElementById(input.id + '-hidden');
 
-        garradin.load('{/literal}{$self_url}{literal}&q=' + escape(input.value), function(data) {
+        garradin.load('{/literal}{$self_url}{literal}?q=' + escape(input.value), function(data) {
 
             dataList.innerHTML = '';
 

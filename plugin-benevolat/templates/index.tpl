@@ -1,11 +1,9 @@
-{include file="admin/_head.tpl" title="Extension — `$plugin.nom`" current="plugin_`$plugin.id`"}
-{include file="`$plugin_root`/templates/_menu.tpl" current="index"}
+{include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
+{include file="%s/templates/_menu.tpl"|args:$plugin_root current="index"}
 
-{if $error}
-    <p class="error">{$error|escape}</p>
-{/if}
+{form_errors}
 {if $ok}
-    <p class="confirm">{$ok|escape}</p>
+    <p class="confirm">{$ok}</p>
 {/if}
 
 <table class="list">
@@ -23,26 +21,26 @@
     <tbody>
     {foreach from=$liste_ben item="benevolat"}
         <tr>
-            <td><a href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id|escape}">{$benevolat.id|escape}</a></td>
+            <td><a href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id}">{$benevolat.id}</a></td>
             {if $benevolat.id_membre != NULL}
-                <th>{$benevolat.nom|escape}</th>
+                <th>{$benevolat.nom}</th>
             {else}
-                <th>{$benevolat.nom_prenom|escape}</th>
+                <th>{$benevolat.nom_prenom}</th>
             {/if}
-            {if $benevolat.plage == 'on'}
-                <td>{$benevolat.date|escape} au<br>{$benevolat.date_fin}</td>
+            {if $benevolat.plage == "on"}
+                <td>{$benevolat.date} au<br>{$benevolat.date_fin}</td>
             {else}
-                <td>{$benevolat.date|escape}</td>
+                <td>{$benevolat.date}</td>
             {/if}
-            <td class="num">{$benevolat.heures|escape}</td>
-            <td class="num">{$benevolat.taux_horaire|html_money} {$config.monnaie|escape}/h</td>
-            <td>{$benevolat.categorie|escape}</td>
+            <td class="num">{$benevolat.heures}</td>
+            <td class="num">{$benevolat.taux_horaire} {$config.monnaie}/h</td>
+            <td>{$benevolat.categorie}</td>
             <td>{$benevolat.description_courte}{if strlen($benevolat.description) >= 30}…{/if}</td>
             <td class="actions">
-                <a class="icn" href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id|escape}" title="Voir les enregistrements">𝍢</a>
-                {if $user.droits.membres >= Garradin\Membres::DROIT_ADMIN}
-                    <a class="icn" href="{plugin_url file="benevolat_modifier.php"}?id={$benevolat.id|escape}" title="Modifier">✎</a>
-                    <a class="icn" href="{plugin_url file="benevolat_supprimer.php"}?id={$benevolat.id|escape}" title="Supprimer">✘</a>
+                <a class="icn" href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id}" title="Voir les enregistrements">𝍢</a>
+                {if $session->canAccess('membres', Garradin\Membres::DROIT_ADMIN)}
+                    <a class="icn" href="{plugin_url file="benevolat_modifier.php"}?id={$benevolat.id}" title="Modifier">✎</a>
+                    <a class="icn" href="{plugin_url file="benevolat_supprimer.php"}?id={$benevolat.id}" title="Supprimer">✘</a>
                 {/if}
             </td>
         </tr>
@@ -50,7 +48,7 @@
     </tbody>
 </table>
 
-    <form method="post" action="{$self_url|escape}">
+    <form method="post" action="{$self_url}">
         <fieldset>
             <legend>Ajouter une contribution bénévole</legend>
             <dl>
@@ -73,11 +71,11 @@
                 <dl class="catList">
                 {foreach from=$liste_cat item="cat"}
                     <dt>
-                    <input type="radio" name="id_categorie" value="{$cat.id|escape}" id="f_cat_{$cat.id|escape}" {form_field name="id_categorie" checked=$cat.id} required="required"/>
-                    <label for="f_cat_{$cat.id|escape}">{$cat.nom|escape} à {$cat.taux_horaire}€/h</label>
+                    <input type="radio" name="id_categorie" value="{$cat.id}" id="f_cat_{$cat.id}" {form_field name="id_categorie" checked=$cat.id} required="required"/>
+                    <label for="f_cat_{$cat.id}">{$cat.nom} à {$cat.taux_horaire}€/h</label>
                     </dt>
                     {if !empty($cat.description)}
-                        <dd class="desc">{$cat.description|escape}</dd>
+                        <dd class="desc">{$cat.description}</dd>
                     {/if}
                 {/foreach}
                 </dl>
@@ -132,7 +130,7 @@
             dataList = document.querySelector("#" + list),
             hiddenInput = document.getElementById(input.id + '-hidden');
 
-        garradin.load('{/literal}{$self_url|escape}{literal}&q=' + escape(input.value), function(data) {
+        garradin.load('{/literal}{$self_url}{literal}&q=' + escape(input.value), function(data) {
 
             dataList.innerHTML = '';
 
@@ -160,36 +158,6 @@
             hiddenInput.value = '';
         }
     });
-
-    function fillDateRetour(elm)
-    {
-        var txtRetour = document.getElementById('f_date_retour');
-        var dtePicker = document.forms[0].date_end;
-
-        var selectedOption = elm.options[elm.selectedIndex];
-        var days = parseInt(selectedOption.getAttribute('data-nbjours'));
-
-        if(days > 0) {
-
-            var datDeb = document.forms[0].date_begin;
-            if(datDeb.value) {
-                var dat = new Date(datDeb.value.toString());
-            } else {
-                var dat = new Date();
-            }
-            dat.setDate(dat.getDate() + days);
-
-            txtRetour.value = dat.toLocaleDateString();
-            dtePicker.value = dat.toISOString().split('T')[0];
-
-        } else {
-
-            txtRetour.value = '';
-            dtePicker.value = '';
-
-        }
-
-    }
 </script>
 {/literal}
 

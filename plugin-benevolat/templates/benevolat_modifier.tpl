@@ -1,10 +1,8 @@
-{include file="admin/_head.tpl" title="Extension — `$plugin.nom`" current="plugin_`$plugin.id`"}
-{include file="`$plugin_root`/templates/_menu.tpl" current="other"}
+{include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
+{include file="%s/templates/_menu.tpl"|args:$plugin_root current="other"}
 
-{if $error}
-    <p class="error">{$error|escape}</p>
-{/if}
-<form method="post" action="{$self_url|escape}">
+{form_errors}
+<form method="post" action="{$self_url}">
     <fieldset>
         <legend>Modifier une contribution bénévole</legend>
         <dl>
@@ -28,11 +26,11 @@
             <dl class="catList">
                 {foreach from=$categories item="cat"}
                     <dt>
-                        <input type="radio" name="id_categorie" value="{$cat.id|escape}" id="f_cat_{$cat.id|escape}" {form_field name="id_categorie" checked=$cat.id data=$contribution} />
-                        <label for="f_cat_{$cat.id|escape}">{$cat.nom|escape} à {$cat.taux_horaire}€/h</label>
+                        <input type="radio" name="id_categorie" value="{$cat.id}" id="f_cat_{$cat.id}" {form_field name="id_categorie" checked=$cat.id data=$contribution} />
+                        <label for="f_cat_{$cat.id}">{$cat.nom} à {$cat.taux_horaire}€/h</label>
                     </dt>
                     {if !empty($cat.description)}
-                        <dd class="desc">{$cat.description|escape}</dd>
+                        <dd class="desc">{$cat.description}</dd>
                     {/if}
                 {/foreach}
             </dl>
@@ -85,7 +83,7 @@
             dataList = document.querySelector("#" + list),
             hiddenInput = document.getElementById(input.id + '-hidden');
 
-        garradin.load('{/literal}{$self_url|escape}{literal}&q=' + escape(input.value), function(data) {
+        garradin.load('{/literal}{$self_url}{literal}&q=' + escape(input.value), function(data) {
 
             dataList.innerHTML = '';
 
@@ -113,36 +111,6 @@
             hiddenInput.value = '';
         }
     });
-
-    function fillDateRetour(elm)
-    {
-        var txtRetour = document.getElementById('f_date_retour');
-        var dtePicker = document.forms[0].date_end;
-
-        var selectedOption = elm.options[elm.selectedIndex];
-        var days = parseInt(selectedOption.getAttribute('data-nbjours'));
-
-        if(days > 0) {
-
-            var datDeb = document.forms[0].date_begin;
-            if(datDeb.value) {
-                var dat = new Date(datDeb.value.toString());
-            } else {
-                var dat = new Date();
-            }
-            dat.setDate(dat.getDate() + days);
-
-            txtRetour.value = dat.toLocaleDateString();
-            dtePicker.value = dat.toISOString().split('T')[0];
-
-        } else {
-
-            txtRetour.value = '';
-            dtePicker.value = '';
-
-        }
-
-    }
 </script>
 {/literal}
 

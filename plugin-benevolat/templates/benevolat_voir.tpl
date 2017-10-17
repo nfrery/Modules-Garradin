@@ -1,15 +1,15 @@
-{include file="admin/_head.tpl" title="Extension — `$plugin.nom`" current="plugin_`$plugin.id`"}
-{include file="`$plugin_root`/templates/_menu.tpl" current="benevolat"}
+{include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
+{include file="%s/templates/_menu.tpl"|args:$plugin_root current="benevolat"}
 
 
         <dl class="describe">
             <dt><label>Personne bénévole</label></dt>
             <dd>{$contribution.nom}</dd>
             <dt><label>Date du bénévolat</label></dt>
-            {if $contribution.plage != '0'}
-                <dd>{$contribution.date|escape} au {$contribution.date_fin}</dd>
+            {if $contribution.plage == 'on'}
+                <dd>{$contribution.date} au {$contribution.date_fin}</dd>
             {else}
-                <dd>{$contribution.date|escape}</dd>
+                <dd>{$contribution.date}</dd>
             {/if}
             <dt><label>Temps de bénévolat</label></dt>
             <dd>{$contribution.heures} heures</dd>

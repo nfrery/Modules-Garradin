@@ -2,30 +2,19 @@
 
 namespace Garradin;
 
-if ($user['droits']['membres'] < Membres::DROIT_ECRITURE)
-{
-    throw new UserException("Vous n'avez pas le droit d'accéder à cette page.");
-}
+$session->requireAccess('config', Membres::DROIT_ECRITURE);
 
 $benevolat = new Plugin\Benevolat\BD();
 
-$contribution = $benevolat->getEnregistrement((int)Utils::get('id'));
+$contribution = $benevolat->getEnregistrement(qg('id'));
 
 if(empty($contribution))
 {
     throw new UserException('Contribution inexistante.');
 }
 
-$error = false;
-
-if (!empty($_POST['delete']))
+if (f('delete') && $form->check('ben_supprimer_'.$contribution['id']))
 {
-    if (!Utils::CSRF_check('ben_supprimer_'.$contribution['id']))
-    {
-        $error = 'Une erreur est survenue, merci de renvoyer le formulaire.';
-    }
-    else
-    {
         try
         {
             $benevolat->removeBenevolat($contribution['id']);
@@ -33,11 +22,9 @@ if (!empty($_POST['delete']))
         }
         catch (UserException $e)
         {
-            $error = $e->getMessage();
+            $form->addError($e->getMessage());
         }
-    }
 }
 
-$tpl->assign('error', $error);
 $tpl->assign('contribution', $contribution);
 $tpl->display(PLUGIN_ROOT . '/templates/benevolat_supprimer.tpl');

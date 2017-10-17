@@ -7,37 +7,32 @@
  */
  namespace Garradin;
 
- if ($user['droits']['membres'] < Membres::DROIT_ECRITURE)
- {
-     throw new UserException("Vous n'avez pas le droit d'accéder à cette page.");
- }
+ $session->requireAccess('config', Membres::DROIT_ECRITURE);
+
 
  $benevolat = new Plugin\Benevolat\BD();
 
- $contribution = $benevolat->getEnregistrement((int) Utils::get('id'));
+ $contribution = (array)$benevolat->getEnregistrement(qg('id'));
  $categories = $benevolat->getListeCategories();
 
- $error = false;
-
- if (!empty($_POST['add']))
- {
-     if (!Utils::CSRF_check('edit_contribution'))
-     {
-         $error = 'Une erreur est survenue, merci de renvoyer le formulaire.';
-     }
-     else
-     {
+if(f('add') && $form->check('edit_contribution'))
+{
          try {
+             $date_fin = f('date_fin');
+             if(f('plage') == 'on')
+             {
+                 $date_fin = null;
+             }
              $data = [
-                 'nom_prenom'              =>  Utils::post('nom_prenom'),
-                 'id_membre'     =>  Utils::post('id_membre'),
-                 'date'         =>  Utils::post('date'),
-                 'date_fin'         =>  Utils::post('date_fin'),
-                 'plage'         =>  Utils::post('plage'),
-                 'heures'           =>  Utils::post('heure'),
-                 'id_categorie'    =>  Utils::post('id_categorie'),
-                 'description'     =>  Utils::post('description'),
-                 'id_membre_modif'     =>  $user['id'],
+                 'nom_prenom'       =>  f('nom_prenom'),
+                 'id_membre'        =>  f('id_membre'),
+                 'date'             =>  f('date'),
+                 'date_fin'         =>  $date_fin,
+                 'plage'            =>  f('plage'),
+                 'heures'           =>  f('heure'),
+                 'id_categorie'     =>  f('id_categorie'),
+                 'description'      =>  f('description'),
+                 'id_membre_modif'  =>  $session->getUser()->id,
              ];
 
              $benevolat->editContribution($contribution['id'], $data);
@@ -45,12 +40,10 @@
          }
          catch (UserException $e)
          {
-             $error = $e->getMessage();
+             $form-addError ($e->getMessage());
          }
-     }
  }
 
- $tpl->assign('error', $error);
  $tpl->assign('contribution', $contribution);
  $tpl->assign('categories', $categories);
  $tpl->display(PLUGIN_ROOT . '/templates/benevolat_modifier.tpl');

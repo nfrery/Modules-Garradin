@@ -2,42 +2,29 @@
 
 namespace Garradin;
 
-if ($user['droits']['membres'] < Membres::DROIT_ECRITURE)
-{
-    throw new UserException("Vous n'avez pas le droit d'accéder à cette page.");
-}
+$session->requireAccess('config', Membres::DROIT_ECRITURE);
 
 $benevolat = new Plugin\Benevolat\BD();
 
-$categorie = $benevolat->getCategorie((int)Utils::get('id'));
+$categorie = $benevolat->getCategorie(qg('id'));
 
 if(empty($categorie))
 {
     throw new UserException('Categorie inexistante.');
 }
 
-$error = false;
-
-if (!empty($_POST['delete']))
+if(f('delete') && $form->check('cat_supprimer_'.$categorie['id']))
 {
-    if (!Utils::CSRF_check('cat_supprimer_'.$categorie['id']))
+    try
     {
-        $error = 'Une erreur est survenue, merci de renvoyer le formulaire.';
+        $benevolat->removeCategorie($categorie['id']);
+        utils::redirect(PLUGIN_URL . 'index.php?suppr_cat_ok');
     }
-    else
+    catch (UserException $e)
     {
-        try
-        {
-            $benevolat->removeCategorie($categorie['id']);
-            utils::redirect(PLUGIN_URL . 'index.php?suppr_cat_ok');
-        }
-        catch (UserException $e)
-        {
-            $error = $e->getMessage();
-        }
+        $form->addError($e->getMessage());
     }
 }
 
-$tpl->assign('error', $error);
 $tpl->assign('categorie', $categorie);
 $tpl->display(PLUGIN_ROOT . '/templates/cat_supprimer.tpl');

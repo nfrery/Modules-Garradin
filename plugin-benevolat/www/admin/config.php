@@ -2,66 +2,35 @@
 
 namespace Garradin;
 
-if ($user['droits']['config'] < Membres::DROIT_ADMIN)
-{
-    throw new UserException("Vous n'avez pas le droit d'accéder à cette page.");
-}
+$session->requireAccess('config', Membres::DROIT_ADMIN);
 
-$error = false;
+$db = new Plugin\Benevolat\BD;
 
-// Restauration de ce qui était en session
-if ($champs = $membres->sessionGet('champs_membres'))
-{
-    $champs = new Membres\Champs($champs);
-}
-else
-{
-    // Il est nécessaire de créer une nouvelle instance ici, sinon
-    // l'enregistrement des modifs ne marchera pas car les deux instances seront identiques.
-    // Càd si on utilise directement l'instance de $config, elle sera modifiée directement
-    // du coup quand on essaiera de comparer si ça a changé ça comparera deux fois la même chose
-    // donc ça n'aura pas changé forcément.
-    $champs = new Membres\Champs($config->get('champs_membres'));
-}
-
-if($plugin->getConfig('key_api') != "")
-{
-    $listes = $listes['lists'];
-} else {
-    $listes = false;
-}
-
+$ok = '';
 if (isset($_GET['ok']))
 {
-    $error = 'OK';
+    $ok = 'OK';
 }
 
-if($listes == false)
+if(qg('export') !== null)
 {
-    $listes = "";
+    header('Content-type: application/csv');
+    header('Content-Disposition: attachment; filename="Export bénévolat - ' . $config->get('nom_asso') . ' - ' . date('Y-m-d') . '.csv"');
+    $db->toCSV();
+    exit;
 }
 
-if (utils::post('save'))
+if(f('config') && $form->check('modif_config'))
 {
-    if (!utils::CSRF_check('config_plugin_' . $plugin->id()))
-    {
-        $error = 'Une erreur est survenue, merci de renvoyer le formulaire.';
+    try{
+        $plugin->setConfig('soutien', (bool) f('soutien'));
+        utils::redirect(PLUGIN_URL . 'config.php?ok');
     }
-    else
+    catch (UserException $e)
     {
-        try {
-            $plugin->setConfig('', (string)utils::post(''));
-            utils::redirect(PLUGIN_URL . 'config.php?ok');
-        }
-        catch (UserException $e)
-        {
-            $error = $e->getMessage();
-        }
+        $from->addError($e->getMessage());
     }
 }
 
-$tpl->assign('error', $error);
-$tpl->assign('formulaires', $champs->getAll());
-$tpl->assign('listes', $listes);
-
+$tpl->assign('confirm', $ok);
 $tpl->display(PLUGIN_ROOT . '/templates/config.tpl');

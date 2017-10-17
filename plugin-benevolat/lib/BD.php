@@ -29,15 +29,15 @@ class BD
             throw new UserException('Date vide ou invalide.');
         }
 
-        if (!$db->simpleQuerySingle('SELECT 1 FROM compta_exercices WHERE cloture = 0
-            AND debut <= :date AND fin >= :date;', false, ['date' => $data['date']]))
+        if (!$db->get('SELECT 1 FROM compta_exercices WHERE cloture = 0
+            AND debut <= :date AND fin >= :date;', ['date' => $data['date']]))
         {
             throw new UserException('La date ne correspond pas à l\'exercice en cours.');
         }
 
         if (isset($data['id_categorie']))
         {
-            if (!$db->simpleQuerySingle('SELECT 1 FROM plugin_benevolat_categorie WHERE id = ?;', false, (int)$data['id_categorie']))
+            if (!$db->get('SELECT 1 FROM plugin_benevolat_categorie WHERE id = ?;', (int)$data['id_categorie']))
             {
                 throw new UserException('Catégorie inconnue.');
             }
@@ -70,7 +70,7 @@ class BD
         $db = DB::getInstance();
         $e = new Journal();
         $data['id_exercice'] = $e->checkExercice();
-        $db->simpleInsert('plugin_benevolat_enregistrement', $data);
+        $db->insert('plugin_benevolat_enregistrement', $data);
         return true;
     }
 
@@ -78,21 +78,21 @@ class BD
     {
         $db = DB::getInstance();
         $this->_checkFieldsContribution($data);
-        $db->simpleUpdate('plugin_benevolat_enregistrement', $data, 'id = \''.trim($id).'\'');
+        $db->update('plugin_benevolat_enregistrement', $data, 'id = \''.trim($id).'\'');
         return true;
     }
 
     public function removeBenevolat($id)
     {
         $db = DB::getInstance();
-        $db->simpleExec("DELETE FROM plugin_benevolat_enregistrement WHERE id = ?;",(int)$id);
+        $db->exec("DELETE FROM plugin_benevolat_enregistrement WHERE id = ?;",(int)$id);
         return true;
     }
 
     public function getEnregistrement($id)
     {
         $db = DB::getInstance();
-        return $db->simpleQuerySingle("SELECT ben.*,
+        return $db->first("SELECT ben.*,
             (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
             (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom,
             (SELECT nom FROM membres WHERE id = ben.id_membre_ajout) AS nom_membre_ajout,
@@ -100,19 +100,19 @@ class BD
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie,
             (SELECT (taux_horaire * ben.heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
-            FROM plugin_benevolat_enregistrement AS ben WHERE id = :id;", true, $id);
+            FROM plugin_benevolat_enregistrement AS ben WHERE id = :id;", $id);
     }
 
     public function addCategorie($data)
     {
         $db = DB::getInstance(true);
-        $db->simpleInsert('plugin_benevolat_categorie', $data);
+        $db->insert('plugin_benevolat_categorie', $data);
     }
 
     public function editCategorie($id, $data)
     {
         $db = DB::getInstance();
-        $db->simpleUpdate('plugin_benevolat_categorie', $data, 'id = \''.trim($id).'\'');
+        $db->update('plugin_benevolat_categorie', $data, 'id = \''.trim($id).'\'');
         return true;
     }
 
@@ -120,25 +120,25 @@ class BD
     {
         $db = DB::getInstance();
 
-        if($db->simpleQuerySingle('SELECT 1 FROM plugin_benevolat_enregistrement WHERE id_categorie = ? LIMIT 1;',false, $id))
+        if($db->first('SELECT 1 FROM plugin_benevolat_enregistrement WHERE id_categorie = ? LIMIT 1;',false, $id))
         {
             throw new UserException('Cette catégorie ne peut être supprimée car des contributions bénévoles y sont associées.');
         }
 
-        $db->simpleExec("DELETE FROM plugin_benevolat_categorie WHERE id = ?;",(int)$id);
+        $db->exec("DELETE FROM plugin_benevolat_categorie WHERE id = ?;",(int)$id);
         return true;
     }
 
     public function getCategorie($id)
     {
         $db = DB::getInstance();
-        return $db->simpleQuerySingle("SELECT * FROM plugin_benevolat_categorie WHERE id = :id;", true, $id);
+        return $db->first("SELECT * FROM plugin_benevolat_categorie WHERE id = :id;", true, $id);
     }
 
     public function getEnregistrements()
     {
         $db = DB::getInstance();
-        return $db->simpleStatementFetch("SELECT ben.*,
+        return $db->get("SELECT ben.*,
             (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
             (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
@@ -150,7 +150,7 @@ class BD
     public function getLastsEnregistrements()
     {
         $db = DB::getInstance();
-        return $db->simpleStatementFetch("SELECT ben.*,
+        return $db->get("SELECT ben.*,
             (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
             (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
@@ -161,7 +161,7 @@ class BD
     public function getStatsCategorie($id)
     {
         $db = DB::getInstance();
-        return $db->simpleQuerySingle("SELECT cat.*,
+        return $db->first("SELECT cat.*,
             (SELECT SUM(heures) FROM plugin_benevolat_enregistrement WHERE id_categorie = cat.id) AS nb_heures
             FROM plugin_benevolat_categorie AS cat WHERE id = :id;", true, ['id' => (int) $id]);
     }
@@ -169,21 +169,62 @@ class BD
     public function getEnregistrementsCategorie($id)
     {
         $db = DB::getInstance();
-        return $db->simpleStatementFetch("SELECT ben.*,
+        return $db->get("SELECT ben.*,
             (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie,
             (SELECT (taux_horaire * ben.heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
             FROM plugin_benevolat_enregistrement AS ben
-            WHERE id_categorie = :id;",true,['id' => (int) $id]);
+            WHERE id_categorie = :id;",['id' => (int) $id]);
     }
 
     public function getListeCategories()
     {
         $db = DB::getInstance();
-        return $db->simpleStatementFetch("SELECT cat.*,
+        return $db->get("SELECT cat.*,
             (SELECT TOTAL(heures) FROM plugin_benevolat_enregistrement WHERE id_categorie = cat.id) AS nb_heures
             FROM plugin_benevolat_categorie AS cat;");
     }
 
+    protected $csv_header = [
+        'id',
+        'Date de début',
+        'Date de fin',
+        'Bénévole',
+        'Heures',
+        'Taux horaire €/h',
+        'Nom catégorie horaire',
+        'Valorisé €',
+        'Description de l\'activité'
+    ];
+
+    public function toCSV()
+    {
+        $db = DB::getInstance();
+
+        $res = $db->prepare('SELECT p.id,
+strftime(\'%d/%m/%Y\', date) AS date,
+strftime(\'%d/%m/%Y\', date_fin) AS date_fin,
+(SELECT nom FROM membres WHERE id = p.id_membre) AS benevole,
+p.heures,
+(SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS taux_horaire,
+(SELECT nom FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS nom_cat,
+(SELECT (taux_horaire * p.heures) FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS valorise,
+description
+FROM plugin_benevolat_enregistrement AS p
+ORDER BY date(date) ASC;')->execute();
+
+        $fp = fopen('php://output', 'w');
+
+        fputcsv($fp, $this->csv_header);
+
+        while ($row = $res->fetchArray(SQLITE3_ASSOC))
+        {
+            fputcsv($fp, $row);
+        }
+
+        fclose($fp);
+
+        return true;
+    }
 }

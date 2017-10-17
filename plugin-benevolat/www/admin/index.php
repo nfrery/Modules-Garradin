@@ -2,21 +2,21 @@
 
 namespace Garradin;
 
-use Garradin\Plugin\Benevolat\BD;
-
-if (isset($_GET['q'])) {
-
+if ($q = qg('q'))
+{
     $aResult = [];
-    if (!empty($_GET['q'])) {
+    if (!empty($q))
+    {
         $membres       = new Membres;
-        $membres_liste = $membres->search('nom', $_GET['q']);
+        $membres_liste = $membres->search('nom', $q);
 
         $i = 0;
         foreach ($membres_liste as $membre) {
-            $aResult[$i]['id']    = $membre['id'];
-            $aResult[$i]['value'] = $membre['nom'];
-            if (!empty($membre['email'])) {
-                $aResult[$i]['value'] .= ' (' . $membre['email'] . ')';
+            $a = (array)$membre;
+            $aResult[$i]['id']    =  $a['id'];
+            $aResult[$i]['value'] =  $a['nom'];
+            if (!empty($a['email'])) {
+                $aResult[$i]['value'] .= ' (' . $a['email'] . ')';
             }
             $i++;
         }
@@ -25,60 +25,49 @@ if (isset($_GET['q'])) {
     exit;
 }
 
-
-
 $benevolat = new Plugin\Benevolat\BD();
 
-$error = false;
 $ok = false;
 
-if (!empty($_POST['add']))
+if (f('add') && $form->check('add_benevolat'))
 {
-    if (!Utils::CSRF_check('add_benevolat'))
-    {
-        $error = 'Une erreur est survenue, merci de renvoyer le formulaire.';
-    }
-    else
-    {
-        try {
-            $data = [
-                'nom_prenom'              =>  Utils::post('nom_prenom'),
-                'id_membre'     =>  Utils::post('id_membre'),
-                'date'         =>  Utils::post('date'),
-                'date_fin'         =>  Utils::post('date_fin'),
-                'plage'         =>  Utils::post('plage'),
-                'heures'           =>  Utils::post('heure'),
-                'id_categorie'    =>  Utils::post('id_categorie'),
-                'description'     =>  Utils::post('description'),
-                'id_membre_ajout'     =>  $user['id'],
-            ];
+    try {
+        $data = [
+            'nom_prenom'        =>  f('nom_prenom'),
+            'id_membre'         =>  f('id_membre'),
+            'date'              =>  f('date'),
+            'date_fin'          =>  f('date_fin'),
+            'plage'             =>  f('plage'),
+            'heures'            =>  f('heure'),
+            'id_categorie'      =>  f('id_categorie'),
+            'description'       =>  f('description'),
+            'id_membre_ajout'   =>  $session->getUser()->id,
+        ];
 
-            $benevolat->addBenevolat($data);
-            utils::redirect(PLUGIN_URL . 'index.php?add_ben_ok');
-        }
-        catch (UserException $e)
-        {
-            $error = $e->getMessage();
-        }
+        $benevolat->addBenevolat($data);
+        utils::redirect(PLUGIN_URL . 'index.php?add_ben_ok');
+    }
+    catch (UserException $e)
+    {
+        $form->addError($e->getMessage());
     }
 }
 
-if(isset($_GET['suppr_contrib_ok']))
+if(qg('suppr_contrib_ok'))
 {
     $ok = "Contribution supprimée.";
 }
 
-if(isset($_GET['suppr_cat_ok']))
+if(qg('suppr_cat_ok'))
 {
     $ok = "Catégorie supprimée.";
 }
 
-if(isset($_GET['add_ben_ok']))
+if(qg('add_ben_ok'))
 {
     $ok = "Contribution ajoutée avec succès.";
 }
 
-$tpl->assign('error', $error);
 $tpl->assign('ok', $ok);
 $tpl->assign('liste_ben', $benevolat->getLastsEnregistrements());
 $tpl->assign('liste_cat', $benevolat->getListeCategories());

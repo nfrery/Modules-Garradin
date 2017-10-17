@@ -4,14 +4,11 @@ namespace Garradin;
 
 use Garradin\Plugin\Benevolat\BD;
 
-if ($user['droits']['membres'] < Membres::DROIT_ECRITURE)
-{
-    throw new UserException("Vous n'avez pas le droit d'accéder à cette page.");
-}
+$session->requireAccess('config', Membres::DROIT_ECRITURE);
 
 $benevolat = new BD();
 
-$enregistrements = $benevolat->getEnregistrementsCategorie((int)Utils::get('id'));
+$enregistrements = $benevolat->getEnregistrementsCategorie(qg('id'));
 
 $error = false;
 

@@ -2,42 +2,30 @@
 
 namespace Garradin;
 
-if ($user['droits']['membres'] < Membres::DROIT_ECRITURE)
-{
-    throw new UserException("Vous n'avez pas le droit d'accéder à cette page.");
-}
+$session->requireAccess('config', Membres::DROIT_ECRITURE);
 
 $benevolat = new Plugin\Benevolat\BD();
 
-$categorie = $benevolat->getCategorie((int) Utils::get('id'));
+$categorie = $benevolat->getCategorie(qg('id'));
 
-$error = false;
 
-if (!empty($_POST['add']))
+if(f('add') && $form->check('edot_categorie'))
 {
-    if (!Utils::CSRF_check('edit_categorie'))
-    {
-        $error = 'Une erreur est survenue, merci de renvoyer le formulaire.';
+    $data = [
+    'nom'               =>  f('nom'),
+    'taux_horaire'      =>  f('taux_horaire'),
+    'description'       =>  f('description'),
+    ];
+    try {
+        $benevolat->editCategorie($categorie['id'], $data);
+        utils::redirect(PLUGIN_URL . 'categorie.php?edit_cat_ok');
     }
-    else
+    catch (UserException $e)
     {
-        try {
-            $data = [
-                'nom'               =>  Utils::post('nom'),
-                'taux_horaire'              =>  Utils::post('taux_horaire'),
-                'description'       =>  Utils::post('description'),
-            ];
+        $form->addError($e->getMessage());
+    }
 
-            $benevolat->editCategorie($categorie['id'], $data);
-            utils::redirect(PLUGIN_URL . 'categorie.php?edit_cat_ok');
-        }
-        catch (UserException $e)
-        {
-            $error = $e->getMessage();
-        }
-    }
 }
 
-$tpl->assign('error', $error);
 $tpl->assign('categorie', $categorie);
 $tpl->display(PLUGIN_ROOT . '/templates/cat_modifier.tpl');

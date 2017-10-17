@@ -1,12 +1,10 @@
-{include file="admin/_head.tpl" title="Extension — `$plugin.nom`" current="plugin_`$plugin.id`"}
-{include file="`$plugin_root`/templates/_menu.tpl" current="categorie"}
+{include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
+{include file="%s/templates/_menu.tpl"|args:$plugin_root current="categorie"}
 
-{if $error}
-    <p class="error">{$error|escape}</p>
-{/if}
+{form_errors}
 
 {if $ok}
-    <p class="confirm">{$ok|escape}</p>
+    <p class="confirm">{$ok}</p>
 {/if}
 
 <table class="list">
@@ -20,15 +18,15 @@
     <tbody>
     {foreach from=$liste item="benevolat"}
         <tr>
-            <th><a href="{plugin_url file="cat_voir.php"}?id={$benevolat.id|escape}">{$benevolat.nom|escape}</a></th>
+            <th><a href="{plugin_url file="cat_voir.php"}?id={$benevolat.id}">{$benevolat.nom}</a></th>
             <td>{$benevolat.description}</td>
-            <td class="num">{$benevolat.taux_horaire|html_money} {$config.monnaie|escape}/h</td>
-            <td class="num">{$benevolat.nb_heures|escape}</td>
+            <td class="num">{$benevolat.taux_horaire} {$config.monnaie}/h</td>
+            <td class="num">{$benevolat.nb_heures}</td>
             <td class="actions">
-                <a class="icn" href="{plugin_url file="cat_voir.php"}?id={$benevolat.id|escape}" title="Voir les enregistrements">𝍢</a>
-                {if $user.droits.membres >= Garradin\Membres::DROIT_ADMIN}
-                    <a class="icn" href="{plugin_url file="cat_modifier.php"}?id={$benevolat.id|escape}" title="Modifier">✎</a>
-                    <a class="icn" href="{plugin_url file="cat_supprimer.php"}?id={$benevolat.id|escape}" title="Supprimer">✘</a>
+                <a class="icn" href="{plugin_url file="cat_voir.php"}?id={$benevolat.id}" title="Voir les enregistrements">𝍢</a>
+                {if $session->canAccess('membres', Garradin\Membres::DROIT_ADMIN)}
+                    <a class="icn" href="{plugin_url file="cat_modifier.php"}?id={$benevolat.id}" title="Modifier">✎</a>
+                    <a class="icn" href="{plugin_url file="cat_supprimer.php"}?id={$benevolat.id}" title="Supprimer">✘</a>
                 {/if}
             </td>
         </tr>
@@ -36,7 +34,7 @@
     </tbody>
 </table>
 
-    <form method="post" action="{$self_url|escape}">
+    <form method="post" action="{$self_url}">
         <fieldset>
             <legend>Ajouter une catégorie</legend>
             <dl>

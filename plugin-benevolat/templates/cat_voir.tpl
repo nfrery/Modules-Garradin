@@ -1,9 +1,7 @@
-{include file="admin/_head.tpl" title="Extension — `$plugin.nom`" current="plugin_`$plugin.id`"}
-{include file="`$plugin_root`/templates/_menu.tpl" current="benevolat"}
+{include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
+{include file="%s/templates/_menu.tpl"|args:$plugin_root current="benevolat"}
 
-{if $error}
-    <p class="error">{$error|escape}</p>
-{/if}
+{form_errors}
 
 <table class="list">
     <thead>
@@ -19,24 +17,24 @@
     {foreach from=$liste item="benevolat"}
         <tr>
             {if $benevolat.id_membre != NULL}
-                <th><a href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id_membre|escape}">{$benevolat.nom|escape}</a></th>
+                <th><a href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id_membre}">{$benevolat.nom}</a></th>
             {else}
-                <th>{$benevolat.nom_prenom|escape}</th>
+                <th>{$benevolat.nom_prenom}</th>
             {/if}
             {if $benevolat.plage == 'on'}
-                <td>{$benevolat.date|escape} au<br>{$benevolat.date_fin}</td>
+                <td>{$benevolat.date} au<br>{$benevolat.date_fin}</td>
             {else}
-                <td>{$benevolat.date|escape}</td>
+                <td>{$benevolat.date}</td>
             {/if}
 
-            <td class="num">{$benevolat.heures|escape}</td>
-            <td class="num">{$benevolat.taux_horaire|html_money} {$config.monnaie|escape}/h</td>
-            <td class="num">{$benevolat.valorise|html_money} {$config.monnaie|escape}</td>
+            <td class="num">{$benevolat.heures}</td>
+            <td class="num">{$benevolat.taux_horaire} {$config.monnaie}/h</td>
+            <td class="num">{$benevolat.valorise} {$config.monnaie}</td>
             <td>{$benevolat.description}</td>
             <td class="actions">
-                {if $user.droits.membres >= Garradin\Membres::DROIT_ADMIN}
-                    <a class="icn" href="{plugin_url file="benevolat_modifier.php"}?id={$benevolat.id|escape}" title="Modifier">✎</a>
-                    <a class="icn" href="{plugin_url file="benevolat_supprimer.php"}?id={$benevolat.id|escape}" title="Supprimer">✘</a>
+                {if $session->canAccess('membres', Garradin\Membres::DROIT_ADMIN)}
+                    <a class="icn" href="{plugin_url file="benevolat_modifier.php"}?id={$benevolat.id}" title="Modifier">✎</a>
+                    <a class="icn" href="{plugin_url file="benevolat_supprimer.php"}?id={$benevolat.id}" title="Supprimer">✘</a>
                 {/if}
             </td>
         </tr>

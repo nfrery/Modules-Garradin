@@ -68,8 +68,6 @@ class BD
     {
         $this->_checkFieldsContribution($data);
         $db = DB::getInstance();
-        $e = new Journal();
-        $data['id_exercice'] = $e->checkExercice();
         $db->insert('plugin_benevolat_enregistrement', $data);
         return true;
     }
@@ -226,5 +224,37 @@ ORDER BY date(date) ASC;')->execute();
         fclose($fp);
 
         return true;
+    }
+
+    public function compteResultat(array $criterias)
+    {
+        $db = DB::getInstance();
+
+        // Si jamais je décide d'écrire dans la bdd de garradin..
+        //$charges = ['comptes' => [], 'total' => 0.0];
+        //$produits = ['comptes' => [], 'total' => 0.0];
+
+        //return ['charges' => $charges, 'produits' => $produits];
+
+        $benevolat_valorise = (array)$db->first('SELECT
+          SUM(
+            (SELECT SUM(taux_horaire *p.heures)
+              FROM plugin_benevolat_categorie  
+              WHERE id = p.id_categorie)) AS valeur
+        FROM plugin_benevolat_enregistrement AS p;');
+
+        $charges['bien'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_debit = \'861\';');
+        $charges['presta'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_debit = \'862\';');
+        $charges['benevolat'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_debit = \'864\';');
+        $produits['bien'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_credit = \'875\';');
+        $produits['presta'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_credit = \'871\';');
+        $produits['benevolat'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_credit = \'870\';');
+
+        $charges['benevolat']['montant'] += $benevolat_valorise['valeur'];
+        $produits['benevolat']['montant'] += $benevolat_valorise['valeur'];
+        $charges['total'] = $charges['bien']['montant'] + $charges['presta']['montant'] + $charges['benevolat']['montant'];
+        $produits['total'] = $produits['bien']['montant'] + $produits['presta']['montant'] + $produits['benevolat']['montant'];
+
+        return ['charges' => $charges, 'produits' => $produits];
     }
 }

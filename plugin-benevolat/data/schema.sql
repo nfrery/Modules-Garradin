@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `plugin_benevolat_enregistrement` (
   `id_compta`       INTEGER UNIQUE,
   `id_categorie`    INTEGER NOT NULL,
   `id_exercice`    INTEGER NOT NULL,
+  `id_projet`    INTEGER NOT NULL,
   `id_membre`       INTEGER,
   `nom_prenom`      TEXT,
   `heures`          INTEGER NOT NULL,

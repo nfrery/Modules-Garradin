@@ -2,6 +2,9 @@
 
 namespace Garradin;
 
+use Garradin\Compta\Exercices;
+use Garradin\Compta\Journal;
+
 if ($q = qg('q'))
 {
     $aResult = [];
@@ -25,7 +28,8 @@ if ($q = qg('q'))
     exit;
 }
 
-$benevolat = new Plugin\Benevolat\BD();
+$benevolat = new Plugin\Benevolat\BD;
+$journal = new Journal;
 
 $ok = false;
 
@@ -42,6 +46,7 @@ if (f('add') && $form->check('add_benevolat'))
             'id_categorie'      =>  f('id_categorie'),
             'description'       =>  f('description'),
             'id_membre_ajout'   =>  $session->getUser()->id,
+            'id_exercice'       =>  $journal->checkExercice()
         ];
 
         $benevolat->addBenevolat($data);

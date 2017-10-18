@@ -83,8 +83,7 @@ class BD
     public function removeBenevolat($id)
     {
         $db = DB::getInstance();
-        $db->exec("DELETE FROM plugin_benevolat_enregistrement WHERE id = ?;",(int)$id);
-        return true;
+        return $db->delete('plugin_benevolat_enregistrement', $db->where('id', $id));
     }
 
     public function getEnregistrement($id)
@@ -118,19 +117,17 @@ class BD
     {
         $db = DB::getInstance();
 
-        if($db->first('SELECT 1 FROM plugin_benevolat_enregistrement WHERE id_categorie = ? LIMIT 1;',false, $id))
+        if($db->test('plugin_benevolat_enregistrement',$db->where('id_categorie', $id)))
         {
             throw new UserException('Cette catégorie ne peut être supprimée car des contributions bénévoles y sont associées.');
         }
-
-        $db->exec("DELETE FROM plugin_benevolat_categorie WHERE id = ?;",(int)$id);
-        return true;
+        return $db->delete('plugin_benevolat_categorie', $db->where('id', $id));
     }
 
     public function getCategorie($id)
     {
         $db = DB::getInstance();
-        return $db->first("SELECT * FROM plugin_benevolat_categorie WHERE id = :id;", true, $id);
+        return $db->first("SELECT * FROM plugin_benevolat_categorie WHERE id = :id;", $id);
     }
 
     public function getEnregistrements()
@@ -161,7 +158,7 @@ class BD
         $db = DB::getInstance();
         return $db->first("SELECT cat.*,
             (SELECT SUM(heures) FROM plugin_benevolat_enregistrement WHERE id_categorie = cat.id) AS nb_heures
-            FROM plugin_benevolat_categorie AS cat WHERE id = :id;", true, ['id' => (int) $id]);
+            FROM plugin_benevolat_categorie AS cat WHERE id = :id;", ['id' => (int) $id]);
     }
 
     public function getEnregistrementsCategorie($id)
@@ -228,6 +225,8 @@ ORDER BY date(date) ASC;')->execute();
 
     public function compteResultat(array $criterias)
     {
+        // Attention aux yeux, c'est très sale.
+        // C'est juste histoire de voir comment je vais pouvoir me débrouiller pour générer un truc correct.
         $db = DB::getInstance();
 
         // Si jamais je décide d'écrire dans la bdd de garradin..

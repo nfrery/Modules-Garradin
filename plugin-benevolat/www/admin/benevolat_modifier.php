@@ -12,7 +12,7 @@
 
  $benevolat = new Plugin\Benevolat\BD();
 
- $contribution = (array)$benevolat->getEnregistrement(qg('id'));
+ $contribution = $benevolat->getEnregistrement(qg('id'));
  $categories = $benevolat->getListeCategories();
 
 if(f('add') && $form->check('edit_contribution'))
@@ -35,7 +35,7 @@ if(f('add') && $form->check('edit_contribution'))
                  'id_membre_modif'  =>  $session->getUser()->id,
              ];
 
-             $benevolat->editContribution($contribution['id'], $data);
+             $benevolat->editContribution($contribution->id, $data);
              utils::redirect(PLUGIN_URL . 'index.php?edit_ben_ok');
          }
          catch (UserException $e)

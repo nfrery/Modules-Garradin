@@ -9,7 +9,7 @@ $benevolat = new Plugin\Benevolat\BD();
 $categorie = $benevolat->getCategorie(qg('id'));
 
 
-if(f('add') && $form->check('edot_categorie'))
+if(f('add') && $form->check('edit_categorie'))
 {
     $data = [
     'nom'               =>  f('nom'),
@@ -17,7 +17,7 @@ if(f('add') && $form->check('edot_categorie'))
     'description'       =>  f('description'),
     ];
     try {
-        $benevolat->editCategorie($categorie['id'], $data);
+        $benevolat->editCategorie($categorie->id, $data);
         utils::redirect(PLUGIN_URL . 'categorie.php?edit_cat_ok');
     }
     catch (UserException $e)

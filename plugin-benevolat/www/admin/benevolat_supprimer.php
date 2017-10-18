@@ -13,11 +13,11 @@ if(empty($contribution))
     throw new UserException('Contribution inexistante.');
 }
 
-if (f('delete') && $form->check('ben_supprimer_'.$contribution['id']))
+if (f('delete') && $form->check('ben_supprimer_'.$contribution->id))
 {
         try
         {
-            $benevolat->removeBenevolat($contribution['id']);
+            $benevolat->removeBenevolat($contribution->id);
             utils::redirect(PLUGIN_URL . 'index.php?suppr_contrib_ok');
         }
         catch (UserException $e)

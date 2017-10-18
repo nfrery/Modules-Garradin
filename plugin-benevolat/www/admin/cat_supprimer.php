@@ -8,17 +8,19 @@ $benevolat = new Plugin\Benevolat\BD();
 
 $categorie = $benevolat->getCategorie(qg('id'));
 
+$db = DB::getInstance();
+
 if(empty($categorie))
 {
     throw new UserException('Categorie inexistante.');
 }
 
-if(f('delete') && $form->check('cat_supprimer_'.$categorie['id']))
+if(f('delete') && $form->check('cat_supprimer_'.$categorie->id))
 {
     try
     {
-        $benevolat->removeCategorie($categorie['id']);
-        utils::redirect(PLUGIN_URL . 'index.php?suppr_cat_ok');
+        $benevolat->removeCategorie($categorie->id);
+        utils::redirect(PLUGIN_URL . 'categorie.php?suppr_cat_ok');
     }
     catch (UserException $e)
     {

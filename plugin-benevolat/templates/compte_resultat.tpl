@@ -1,6 +1,23 @@
-{include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id body_id="rapport" }
-{include file="%s/templates/_menu.tpl"|args:$plugin_root current="compte_resultat"}
 
+{include file="admin/_head.tpl" title="Compte de résultat — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id body_id="rapport" js=1}
+{if $current_exercice == '0'}
+    {include file="%s/templates/_menu.tpl"|args:$plugin_root current="compte_resultat"}
+{/if}
+
+{if $current_exercice == '0'}
+    <form method="get" action="{$self_url}" class="shortFormLeft">
+        <fieldset>
+            <legend>Filtrer par exercice</legend>
+            <select name="exercice" id="f_exercice" onchange="this.form.submit();">
+                <option value="0" selected="selected">Selectionner un exercice</option>
+                {foreach from=$liste_exercices key="id" item="libelle"}
+                        <option value="{$id}">{$libelle}</option>
+                {/foreach}
+            </select>
+            <noscript><input type="submit" value="Filtrer &rarr;" /></noscript>
+        </fieldset>
+    </form>
+{else}
 <table>
     <colgroup>
         <col width="50%" />
@@ -78,44 +95,36 @@
         <td>
             <table>
                 <tbody>
-                <tr class="parent">
-                    <th>Emplois des contributions volontaires en nature</th>
-                    <td class="money">{$benevolat.charges.total|escape|html_money}</td>
-                </tr>
-                <tr class="compte">
-                    <th>Secours en nature</th>
-                    <td><b class="money">{$benevolat.charges.bien.montant|escape|html_money}</b></td>
-                </tr>
-                <tr class="compte">
-                    <th>Mise à disposition gratuite de biens et prestations</th>
-                    <td><b class="money">{$benevolat.charges.presta.montant|escape|html_money}</b></td>
-                </tr>
-                <tr class="compte">
-                    <th>Personnel bénévole</th>
-                    <td><b class="money">{$benevolat.charges.benevolat.montant|escape|html_money}</b></td>
-                </tr>
+                {foreach from=$benevolat.charges.comptes key="parent_code" item="parent"}
+                    <tr class="parent">
+                        <th>{$parent_code|get_nom_compte}</th>
+                        <td>{$parent.solde|escape|html_money}</td>
+                    </tr>
+                    {foreach from=$parent.comptes item="solde" key="compte"}
+                        <tr class="compte">
+                            <th>{$compte|get_nom_compte}</th>
+                            <td>{$solde|escape|html_money}</td>
+                        </tr>
+                    {/foreach}
+                {/foreach}
                 </tbody>
             </table>
         </td>
         <td>
             <table>
                 <tbody>
-                <tr class="parent">
-                    <th>Contributions volontaires en nature</th>
-                    <td class="money">{$benevolat.produits.total|escape|html_money}</td>
-                </tr>
-                <tr class="compte">
-                    <th>Dons en nature</th>
-                    <td><b class="money">{$benevolat.produits.bien.montant|escape|html_money}</b></td>
-                </tr>
-                <tr class="compte">
-                    <th>Prestations en nature</th>
-                    <td><b class="money">{$benevolat.produits.presta.montant|escape|html_money}</b></td>
-                </tr>
-                <tr class="compte">
-                    <th>Bénévolat</th>
-                    <td><b class="money">{$benevolat.produits.benevolat.montant|escape|html_money}</b></td>
-                </tr>
+                {foreach from=$benevolat.produits.comptes key="parent_code" item="parent"}
+                    <tr class="parent">
+                        <th>{$parent_code|get_nom_compte}</th>
+                        <td>{$parent.solde|escape|html_money}</td>
+                    </tr>
+                    {foreach from=$parent.comptes item="solde" key="compte"}
+                        <tr class="compte">
+                            <th>{$compte|get_nom_compte}</th>
+                            <td>{$solde|escape|html_money}</td>
+                        </tr>
+                    {/foreach}
+                {/foreach}
                 </tbody>
             </table>
         </td>
@@ -172,5 +181,7 @@
 </table>
 
 <p class="help">Toutes les opérations sont libellées en {$config.monnaie}.</p>
+
+{/if}
 
 {include file="admin/_foot.tpl"}

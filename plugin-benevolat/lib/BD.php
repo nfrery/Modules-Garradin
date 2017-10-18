@@ -223,37 +223,106 @@ ORDER BY date(date) ASC;')->execute();
         return true;
     }
 
+    public function getListeExercices()
+    {
+        $db = DB::getInstance();
+        return $db->getAssoc('SELECT id, libelle, debut, fin
+            FROM compta_exercices ORDER BY id DESC;');
+    }
+
+    protected function getWhereClause(array $criterias)
+    {
+        $where = [];
+        $db = DB::getInstance();
+
+        foreach ($criterias as $name => $value)
+        {
+            $where[] = $db->where($name, $value);
+        }
+
+        return implode(' AND ', $where);
+    }
+
     public function compteResultat(array $criterias)
+    {
+        $db = DB::getInstance();
+        $where = $this->getWhereClause($criterias);
+
+        $charges    = ['comptes' => [], 'total' => 0.0];
+        $produits   = ['comptes' => [], 'total' => 0.0];
+        $resultat   = 0.0;
+
+        $res = $db->preparedQuery('SELECT compte, SUM(debit), SUM(credit)
+            FROM
+                (SELECT compte_debit AS compte, SUM(montant) AS debit, 0 AS credit
+                    FROM compta_journal WHERE ' . $where . ' GROUP BY compte_debit
+                UNION
+                SELECT compte_credit AS compte, 0 AS debit, SUM(montant) AS credit
+                    FROM compta_journal WHERE ' . $where . ' GROUP BY compte_credit)
+            WHERE compte LIKE \'8%\'
+            GROUP BY compte
+            ORDER BY compte ASC;');
+
+        while ($row = $res->fetchArray(SQLITE3_NUM))
+        {
+            list($compte, $debit, $credit) = $row;
+            $classe = substr($compte, 0, 2);
+            $parent = substr($compte, 0, 2);
+
+            if ($classe == 86)
+            {
+                if (!isset($charges['comptes'][$parent]))
+                {
+                    $charges['comptes'][$parent] = ['comptes' => [], 'solde' => 0.0];
+                }
+
+                $solde = round($debit - $credit, 2);
+
+                if (empty($solde))
+                    continue;
+
+                $charges['comptes'][$parent]['comptes'][$compte] = $solde;
+                $charges['total'] += $solde;
+                $charges['comptes'][$parent]['solde'] += $solde;
+            }
+            elseif ($classe == 87)
+            {
+                if (!isset($produits['comptes'][$parent]))
+                {
+                    $produits['comptes'][$parent] = ['comptes' => [], 'solde' => 0.0];
+                }
+
+                $solde = round($credit - $debit, 2);
+
+                if (empty($solde))
+                    continue;
+
+                $produits['comptes'][$parent]['comptes'][$compte] = $solde;
+                $produits['total'] += $solde;
+                $produits['comptes'][$parent]['solde'] += $solde;
+            }
+        }
+
+        $res->finalize();
+
+        $resultat = $produits['total'] - $charges['total'];
+
+        return ['charges' => $charges, 'produits' => $produits, 'resultat' => $resultat];
+    }
+
+    public function compteValorise()
     {
         // Attention aux yeux, c'est très sale.
         // C'est juste histoire de voir comment je vais pouvoir me débrouiller pour générer un truc correct.
         $db = DB::getInstance();
 
-        // Si jamais je décide d'écrire dans la bdd de garradin..
-        //$charges = ['comptes' => [], 'total' => 0.0];
-        //$produits = ['comptes' => [], 'total' => 0.0];
-
-        //return ['charges' => $charges, 'produits' => $produits];
-
-        $benevolat_valorise = (array)$db->first('SELECT
+        $benevolat_valorise = $db->first('SELECT
           SUM(
             (SELECT SUM(taux_horaire *p.heures)
               FROM plugin_benevolat_categorie  
               WHERE id = p.id_categorie)) AS valeur
         FROM plugin_benevolat_enregistrement AS p;');
 
-        $charges['bien'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_debit = \'861\';');
-        $charges['presta'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_debit = \'862\';');
-        $charges['benevolat'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_debit = \'864\';');
-        $produits['bien'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_credit = \'875\';');
-        $produits['presta'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_credit = \'871\';');
-        $produits['benevolat'] = (array)$db->first('SELECT SUM(montant) AS montant FROM compta_journal WHERE compte_credit = \'870\';');
-
-        $charges['benevolat']['montant'] += $benevolat_valorise['valeur'];
-        $produits['benevolat']['montant'] += $benevolat_valorise['valeur'];
-        $charges['total'] = $charges['bien']['montant'] + $charges['presta']['montant'] + $charges['benevolat']['montant'];
-        $produits['total'] = $produits['bien']['montant'] + $produits['presta']['montant'] + $produits['benevolat']['montant'];
-
-        return ['charges' => $charges, 'produits' => $produits];
+        return $benevolat_valorise;
     }
 }

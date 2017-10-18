@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `plugin_benevolat_categorie` (
 -- Exemple de catégorie à utiliser
 
 INSERT INTO `plugin_benevolat_categorie`(`id`,`nom`,`taux_horaire`,`description`)
-    VALUES (NULL,'Non-qualifé','7','Saisie, transport, relecture, distribution, …');
+    VALUES (NULL,'Non-qualifé','9','Saisie, transport, relecture, distribution, …');
 INSERT INTO `plugin_benevolat_categorie`(`id`,`nom`,`taux_horaire`,`description`)
     VALUES (NULL,'Qualifié','13','Animation, rédaction, recherche documentaire, …');
 INSERT INTO `plugin_benevolat_categorie`(`id`,`nom`,`taux_horaire`,`description`)

@@ -6,6 +6,10 @@
     <p class="confirm">{$ok}</p>
 {/if}
 
+<h1>Attention</h1>
+<p>Ce plugin est en pleine refonte. Les futurs contributions bénévoles seront directement intégrées dans la comptabilité de Garradin (actuellement le journal n'est pas rempli).</p>
+<p>C'est pourquoi il faut pour l'instant éviter d'ajouter des contributions bénévoles sur le formulaire ci-dessous. Le développeur travail pour sortir une nouvelle version le plus rapidement possible.</p>
+
 <table class="list">
     <caption>Les 5 dernières contributions ajoutées</caption>
     <thead>

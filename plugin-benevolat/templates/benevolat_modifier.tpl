@@ -4,11 +4,13 @@
 
 {form_errors}
 <form method="post" action="{$self_url}">
-    <fieldset>
-        <legend>Modifier une contribution bénévole</legend>
+    <fieldset><legend>Ajouter une contribution bénévole</legend>
         <dl>
-            <dt><label for="f_membre">Personne bénévole</label></dt>
-            <dd>
+            <dt><label>Contribution réalisée par plusieurs membres </label><input type="checkbox" name="benevole_non_membre" id="f_benevole_non_membre"></dt>
+            <dt class="nombenevole"><label for="f_nom_benevole">Noms et prénoms des bénévoles<b title="(Champ obligatoire)">obligatoire</b></label></dt>
+            <dd class="nombenevole"><textarea name="nom_benevole" id="f_nom_benevole" rows="4" cols="30">{form_field name=nom_benevole data=$contribution}</textarea></dd>
+            <dt class="idbenevole"><label for="f_membre">Personne bénévole<b title="(Champ obligatoire)">obligatoire</b></label></dt>
+            <dd class="idbenevole">
                 <input list="lst_membre" type="text" id="f_membre" autocomplete="off" required="required" placeholder="Entrer les premières lettres du nom ou du prénom" size="50" value="{form_field name=nom_membre data=$contribution}">
                 <datalist id="lst_membre">
                 </datalist>
@@ -69,7 +71,7 @@
         {
             var cb = $('#f_plage');
             var elm = $('#f_date_fin');
-            if(cb.checked == true)
+            if(cb.checked === true)
             {
                 g.toggle('.date_fin', true);
                 elm.required = true;
@@ -81,9 +83,35 @@
             }
         };
 
+        window.changeBenevole = function()
+        {
+            var cb = $('#f_benevole_non_membre');
+            var nom = $('#f_nom_benevole');
+            var id = $('#f_membre');
+            var id_ben = $('#f_membre-hidden');
+            if(cb.checked === true)
+            {
+                g.toggle('.nombenevole', true);
+                g.toggle('.idbenevole', false);
+                nom.required = true;
+                id.required = false;
+                id.value = "";
+                id_ben.value = null;
+            }
+            else {
+                g.toggle('.nombenevole', false);
+                g.toggle('.idbenevole', true);
+                nom.required = false;
+                id.required = true;
+                nom.value = "";
+            }
+        };
+
         changeTypeDuree();
+        changeBenevole();
 
         $('#f_plage').onchange = changeTypeDuree;
+        $('#f_benevole_non_membre').onchange = changeBenevole;
     } ());
     {/literal}
 </script>

@@ -15,35 +15,41 @@
  $contribution = $benevolat->getEnregistrement(qg('id'));
  $categories = $benevolat->getListeCategories();
 
+ if(empty($contribution))
+ {
+     throw new UserException('Cette contribution n\'existe pas.');
+ }
+
 if(f('add') && $form->check('edit_contribution'))
 {
-         try {
-             $date_fin = f('date_fin');
-             if(f('plage') == 'on')
-             {
-                 $date_fin = null;
-             }
-             $data = [
-                 'nom_prenom'       =>  f('nom_prenom'),
-                 'id_membre'        =>  f('id_membre'),
-                 'date'             =>  f('date'),
-                 'date_fin'         =>  $date_fin,
-                 'plage'            =>  f('plage'),
-                 'heures'           =>  f('heure'),
-                 'id_categorie'     =>  f('id_categorie'),
-                 'description'      =>  f('description'),
-                 'id_membre_modif'  =>  $session->getUser()->id,
-             ];
+    try {
+        $data_benevolat = [
+            'nb_heures'         =>  f('nb_heures'),
+            'id_categorie'      =>  f('id_categorie'),
+            'id_benevole'       =>  f('id_benevole'),
+            'nom_benevole'      =>  f('nom_benevole'),
+            'description'       =>  f('description'),
+            'date'              =>  f('date'),
+            'plage'             =>  f('plage'),
+            'date_fin'          =>  f('date_fin'),
+        ];
+        $data_journal = [
+            'date'              =>  f('date'),
+            'id_auteur'         =>  $session->getUser()->id,
+            'id_projet'         =>  f('projet'),
+            'id'                =>  $contribution->id_compta,
+        ];
 
-             $benevolat->editContribution($contribution->id, $data);
-             utils::redirect(PLUGIN_URL . 'index.php?edit_ben_ok');
-         }
-         catch (UserException $e)
-         {
-             $form-addError ($e->getMessage());
-         }
+        $id = $benevolat->editContribution($contribution->id, $data_benevolat, $data_journal);
+        utils::redirect(PLUGIN_URL . 'benevolat_voir.php?id='.$contribution->id.'&edit=ok');
+    }
+    catch (UserException $e)
+    {
+        $form->addError($e->getMessage());
+    }
  }
 
  $tpl->assign('contribution', $contribution);
  $tpl->assign('categories', $categories);
+ $tpl->assign('projets', (new Compta\Projets)->getAssocList());
  $tpl->display(PLUGIN_ROOT . '/templates/benevolat_modifier.tpl');

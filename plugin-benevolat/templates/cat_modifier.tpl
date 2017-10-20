@@ -1,5 +1,6 @@
 {include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
 {include file="%s/templates/_menu.tpl"|args:$plugin_root current="categorie"}
+{include file="%s/templates/_menu_categorie.tpl"|args:$plugin_root current="modifier"}
 
 {form_errors}
 
@@ -14,7 +15,7 @@
             <dd><input type="number" step="0.01" min="0" name="taux_horaire" placeholder="Coût en €/h" id="f_taux" value="{form_field name=taux_horaire data=$categorie}"/></dd>
 
             <dt><label for="f_description">Description</label> </dt>
-            <dd><textarea name="description" id="f_description" rows="4" cols="30" placeholder="" value="{form_field name=description data=$categorie}">{form_field name=description}</textarea></dd>
+            <dd><textarea name="description" id="f_description" rows="4" cols="30" placeholder="">{form_field name=description data=$categorie}</textarea></dd>
         </dl>
     </fieldset>
 

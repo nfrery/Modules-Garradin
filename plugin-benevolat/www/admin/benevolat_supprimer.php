@@ -10,7 +10,7 @@ $contribution = $benevolat->getEnregistrement(qg('id'));
 
 if(empty($contribution))
 {
-    throw new UserException('Contribution inexistante.');
+    throw new UserException('Cette contribution n\'existe pas.');
 }
 
 if (f('delete') && $form->check('ben_supprimer_'.$contribution->id))

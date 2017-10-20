@@ -1,19 +1,17 @@
 
 CREATE TABLE IF NOT EXISTS `plugin_benevolat_enregistrement` (
-  `id`              INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
-  `id_membre_ajout` INTEGER NOT NULL,
-  `id_membre_modif` INTEGER,
-  `id_compta`       INTEGER UNIQUE,
-  `id_categorie`    INTEGER NOT NULL,
-  `id_exercice`    INTEGER NOT NULL,
-  `id_projet`    INTEGER NOT NULL,
-  `id_membre`       INTEGER,
-  `nom_prenom`      TEXT,
-  `heures`          INTEGER NOT NULL,
-  `description`     TEXT    NOT NULL,
-  `date`            TEXT                DEFAULT CURRENT_DATE,
-  `plage`       TEXT,
-  `date_fin`        TEXT
+  `id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+  `id_compta`	INTEGER UNIQUE,
+  `nb_heures`	INTEGER NOT NULL,
+  `id_categorie`	INTEGER NOT NULL,
+  `id_benevole`	INTEGER,
+  `nom_benevole`	TEXT,
+  `description`	TEXT,
+  `date`	TEXT NOT NULL DEFAULT CURRENT_DATE,
+  `plage`	INTEGER DEFAULT 0,
+  `date_fin`	TEXT,
+  FOREIGN KEY(`id_compta`) REFERENCES `compta_journal`(`id`) ON DELETE RESTRICT,
+  FOREIGN KEY(`id_categorie`) REFERENCES `plugin_benevolat_categorie`(`id`) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS `plugin_benevolat_categorie` (
@@ -23,12 +21,3 @@ CREATE TABLE IF NOT EXISTS `plugin_benevolat_categorie` (
   `description`  TEXT,
   `activer`      INTEGER             DEFAULT 1
 );
-
--- Exemple de catégorie à utiliser
-
-INSERT INTO `plugin_benevolat_categorie`(`id`,`nom`,`taux_horaire`,`description`)
-    VALUES (NULL,'Non-qualifé','9','Saisie, transport, relecture, distribution, …');
-INSERT INTO `plugin_benevolat_categorie`(`id`,`nom`,`taux_horaire`,`description`)
-    VALUES (NULL,'Qualifié','13','Animation, rédaction, recherche documentaire, …');
-INSERT INTO `plugin_benevolat_categorie`(`id`,`nom`,`taux_horaire`,`description`)
-    VALUES (NULL,'Expert','18','Développement, administration, création graphique, …');

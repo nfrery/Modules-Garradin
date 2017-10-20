@@ -1,5 +1,6 @@
 {include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
-{include file="%s/templates/_menu.tpl"|args:$plugin_root current="other"}
+{include file="%s/templates/_menu.tpl"|args:$plugin_root current="benevolat"}
+{include file="%s/templates/_menu_contribution.tpl"|args:$plugin_root current="supprimer"}
 
 {form_errors}
 
@@ -8,7 +9,7 @@
     <fieldset>
         <legend>Supprimer une contribution bénévole</legend>
         <h3 class="warning">
-            Êtes-vous sûr de vouloir supprimer la contribution de «&nbsp;{$contribution.nom}&nbsp;»
+            Êtes-vous sûr de vouloir supprimer la contribution de «&nbsp;{if $contribution.id_benevole != NULL}{$contribution.nom_membre}{else}{$contribution.nom_benevole}{/if}&nbsp;»
             du {$contribution.date} ?
         </h3>
     </fieldset>

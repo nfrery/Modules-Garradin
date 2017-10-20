@@ -7,6 +7,10 @@
     <p class="confirm">{$ok}</p>
 {/if}
 
+{if $edit == 'ok'}
+    <p class="confirm">La catégorie a bien été mise à jour.</p>
+{/if}
+
 <table class="list">
     <thead>
     <th>Intitulé</th>

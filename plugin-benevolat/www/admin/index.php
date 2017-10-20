@@ -36,21 +36,24 @@ $ok = false;
 if (f('add') && $form->check('add_benevolat'))
 {
     try {
-        $data = [
-            'nom_prenom'        =>  f('nom_prenom'),
-            'id_membre'         =>  f('id_membre'),
-            'date'              =>  f('date'),
-            'date_fin'          =>  f('date_fin'),
-            'plage'             =>  f('plage'),
-            'heures'            =>  f('heure'),
+        $data_benevolat = [
+            'nb_heures'         =>  f('nb_heures'),
             'id_categorie'      =>  f('id_categorie'),
+            'id_benevole'       =>  f('id_benevole'),
+            'nom_benevole'      =>  f('nom_benevole'),
             'description'       =>  f('description'),
-            'id_membre_ajout'   =>  $session->getUser()->id,
-            'id_exercice'       =>  $journal->checkExercice()
+            'date'              =>  f('date'),
+            'plage'             =>  f('plage'),
+            'date_fin'          =>  f('date_fin'),
+        ];
+        $data_journal = [
+            'date'              =>  f('date'),
+            'id_auteur'         =>  $session->getUser()->id,
+            'id_projet'         =>  f('projet'),
         ];
 
-        $benevolat->addBenevolat($data);
-        utils::redirect(PLUGIN_URL . 'index.php?add_ben_ok');
+        $id = $benevolat->addBenevolat($data_benevolat, $data_journal);
+        utils::redirect(PLUGIN_URL . 'index.php?add_ben_ok='.(int)$id);
     }
     catch (UserException $e)
     {
@@ -74,6 +77,6 @@ if(qg('add_ben_ok'))
 }
 
 $tpl->assign('ok', $ok);
-$tpl->assign('liste_ben', $benevolat->getLastsEnregistrements());
 $tpl->assign('liste_cat', $benevolat->getListeCategories());
+$tpl->assign('projets', (new Compta\Projets)->getAssocList());
 $tpl->display(PLUGIN_ROOT . '/templates/index.tpl');

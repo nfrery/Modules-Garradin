@@ -18,7 +18,7 @@ if(f('add') && $form->check('edit_categorie'))
     ];
     try {
         $benevolat->editCategorie($categorie->id, $data);
-        utils::redirect(PLUGIN_URL . 'categorie.php?edit_cat_ok');
+        utils::redirect(PLUGIN_URL . 'categorie.php?edit=ok');
     }
     catch (UserException $e)
     {

@@ -28,8 +28,7 @@ class BD
         {
             throw new UserException('Date vide ou invalide.');
         }
-
-        if (!$db->get('SELECT 1 FROM compta_exercices WHERE cloture = 0
+        elseif (!$db->get('SELECT 1 FROM compta_exercices WHERE cloture = 0
             AND debut <= :date AND fin >= :date;', ['date' => $data['date']]))
         {
             throw new UserException('La date ne correspond pas à l\'exercice en cours.');
@@ -64,26 +63,63 @@ class BD
         return true;
     }
 
-    public function addBenevolat($data)
+    protected function getTauxHoraire($id)
     {
-        $this->_checkFieldsContribution($data);
         $db = DB::getInstance();
-        $db->insert('plugin_benevolat_enregistrement', $data);
-        return true;
+        return $db->first('SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = :id;', $id)->taux_horaire;
     }
 
-    public function editContribution($id, $data)
+    protected function getIdCompta($id)
     {
         $db = DB::getInstance();
-        $this->_checkFieldsContribution($data);
-        $db->update('plugin_benevolat_enregistrement', $data, 'id = \''.trim($id).'\'');
+        return $db->first('SELECT id_compta FROM plugin_benevolat_enregistrement WHERE id = :id;', $id)->id_compta;
+    }
+
+    public function addBenevolat($data_benevolat, $data_journal)
+    {
+        $this->_checkFieldsContribution($data_benevolat);
+
+        $data_journal['libelle'] = 'Contribution bénévole';
+        $data_journal['montant'] = $data_benevolat['nb_heures'] * $this->getTauxHoraire($data_benevolat['id_categorie']);
+        $data_journal['compte_debit'] = '864';
+        $data_journal['compte_credit'] = '870';
+        $data_journal['remarques'] = 'Pour supprimer cette opération, utiliser le plugin bénévolat.';
+
+        $compte = new Journal();
+        $data_benevolat['id_compta'] = $compte->add($data_journal);
+
+        $db = DB::getInstance();
+        $db->insert('plugin_benevolat_enregistrement', $data_benevolat);
+        return $db->lastInsertRowId();
+    }
+
+    public function editContribution($id, $data_benevolat, $data_journal)
+    {
+        $this->_checkFieldsContribution($data_benevolat);
+
+        $data_journal['libelle'] = 'Contribution bénévole';
+        $data_journal['montant'] = $data_benevolat['nb_heures'] * $this->getTauxHoraire($data_benevolat['id_categorie']);
+        $data_journal['compte_debit'] = '864';
+        $data_journal['compte_credit'] = '870';
+        $data_journal['remarques'] = 'Pour supprimer cette opération, utiliser le plugin bénévolat.';
+
+        $journal = new Journal();
+        $journal->edit($this->getIdCompta($id), $data_journal);
+
+        $db = DB::getInstance();
+        $db->update('plugin_benevolat_enregistrement', $data_benevolat, 'id = \''.trim($id).'\'');
         return true;
     }
 
     public function removeBenevolat($id)
     {
+        $id_compta = $this->getIdCompta($id);
+
         $db = DB::getInstance();
-        return $db->delete('plugin_benevolat_enregistrement', $db->where('id', $id));
+        $db->delete('plugin_benevolat_enregistrement', $db->where('id', $id));
+        $journal = new Journal();
+        $journal->delete($id_compta);
+        return true;
     }
 
     public function getEnregistrement($id)
@@ -91,12 +127,15 @@ class BD
         $db = DB::getInstance();
         return $db->first("SELECT ben.*,
             (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
-            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom,
-            (SELECT nom FROM membres WHERE id = ben.id_membre_ajout) AS nom_membre_ajout,
-            (SELECT nom FROM membres WHERE id = ben.id_membre_modif) AS nom_membre_modif,
+            (SELECT nom FROM membres WHERE id = ben.id_benevole) AS nom_membre,
+			(SELECT id_auteur FORM FROM compta_journal WHERE id = ben.id_compta) AS id_auteur,
+            (SELECT nom FROM membres WHERE id = (SELECT id_auteur FROM compta_journal WHERE id = ben.id_compta)) AS nom_auteur,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie,
-            (SELECT (taux_horaire * ben.heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
+            (SELECT (taux_horaire * ben.nb_heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise,
+			(SELECT id_projet FROM compta_journal WHERE id = ben.id_compta) AS id_projet,
+			(SELECT libelle FROM compta_projets WHERE id = (SELECT id_projet FROM compta_journal WHERE id = ben.id_compta)) AS libelle_projet,
+			(SELECT id_exercice FROM compta_journal WHERE id = ben.id_compta) AS id_exercice
             FROM plugin_benevolat_enregistrement AS ben WHERE id = :id;", $id);
     }
 
@@ -135,10 +174,10 @@ class BD
         $db = DB::getInstance();
         return $db->get("SELECT ben.*,
             (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
-            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom,
+            (SELECT nom FROM membres WHERE id = ben.id_benevole) AS nom_membre,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie,
-            (SELECT (taux_horaire * ben.heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
+            (SELECT (taux_horaire * ben.nb_heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
             FROM plugin_benevolat_enregistrement AS ben;");
     }
 
@@ -165,10 +204,10 @@ class BD
     {
         $db = DB::getInstance();
         return $db->get("SELECT ben.*,
-            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom,
+            (SELECT nom FROM membres WHERE id = ben.id_benevole) AS nom_membre,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie,
-            (SELECT (taux_horaire * ben.heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
+            (SELECT (taux_horaire * ben.nb_heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
             FROM plugin_benevolat_enregistrement AS ben
             WHERE id_categorie = :id;",['id' => (int) $id]);
     }
@@ -177,7 +216,7 @@ class BD
     {
         $db = DB::getInstance();
         return $db->get("SELECT cat.*,
-            (SELECT TOTAL(heures) FROM plugin_benevolat_enregistrement WHERE id_categorie = cat.id) AS nb_heures
+            (SELECT TOTAL(nb_heures) FROM plugin_benevolat_enregistrement WHERE id_categorie = cat.id) AS nb_heures
             FROM plugin_benevolat_categorie AS cat;");
     }
 
@@ -243,7 +282,7 @@ ORDER BY date(date) ASC;')->execute();
         return implode(' AND ', $where);
     }
 
-    public function compteResultat(array $criterias)
+    public function compteResultatBenevolat(array $criterias)
     {
         $db = DB::getInstance();
         $where = $this->getWhereClause($criterias);
@@ -307,22 +346,9 @@ ORDER BY date(date) ASC;')->execute();
 
         $resultat = $produits['total'] - $charges['total'];
 
+        //$compte_benevolat['produits']['general'] = $compte_resultat['produits']['total'] + $compte_benevolat['produits']['total'];
+        //$compte_benevolat['charges']['general'] = $compte_resultat['charges']['total'] + $compte_benevolat['charges']['total'];
+
         return ['charges' => $charges, 'produits' => $produits, 'resultat' => $resultat];
-    }
-
-    public function compteValorise()
-    {
-        // Attention aux yeux, c'est très sale.
-        // C'est juste histoire de voir comment je vais pouvoir me débrouiller pour générer un truc correct.
-        $db = DB::getInstance();
-
-        $benevolat_valorise = $db->first('SELECT
-          SUM(
-            (SELECT SUM(taux_horaire *p.heures)
-              FROM plugin_benevolat_categorie  
-              WHERE id = p.id_categorie)) AS valeur
-        FROM plugin_benevolat_enregistrement AS p;');
-
-        return $benevolat_valorise;
     }
 }

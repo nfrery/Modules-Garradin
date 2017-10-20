@@ -8,6 +8,14 @@ $benevolat = new Plugin\Benevolat\BD();
 
 $ok = false;
 
+$confirmation = false;
+
+if(qg('edit'))
+{
+    $confirmation = 'ok';
+}
+
+
 if(f('add') && $form->check('add_categorie'))
 {
     try {
@@ -34,6 +42,7 @@ if(isset($_GET['add_cat_ok']))
     $ok = "Catégorie ajoutée avec succès.";
 }
 
+$tpl->assign('edit', $confirmation);
 $tpl->assign('ok', $ok);
 $tpl->assign('liste', $benevolat->getListeCategories());
 $tpl->display(PLUGIN_ROOT . '/templates/categorie.tpl');

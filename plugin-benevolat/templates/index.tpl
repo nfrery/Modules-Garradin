@@ -10,48 +10,6 @@
 <p>Ce plugin est en pleine refonte. Les futurs contributions bénévoles seront directement intégrées dans la comptabilité de Garradin (actuellement le journal n'est pas rempli).</p>
 <p>C'est pourquoi il faut pour l'instant éviter d'ajouter des contributions bénévoles sur le formulaire ci-dessous. Le développeur travail pour sortir une nouvelle version le plus rapidement possible.</p>
 
-<table class="list">
-    <caption>Les 5 dernières contributions ajoutées</caption>
-    <thead>
-    <td></td>
-    <th>Bénévole</th>
-    <td>Date</td>
-    <td>Heures</td>
-    <td>Taux horaire</td>
-    <td>Catégorie</td>
-    <td>Activité(s)</td>
-    <td></td>
-    </thead>
-    <tbody>
-    {foreach from=$liste_ben item="benevolat"}
-        <tr>
-            <td><a href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id}">{$benevolat.id}</a></td>
-            {if $benevolat.id_membre != NULL}
-                <th>{$benevolat.nom}</th>
-            {else}
-                <th>{$benevolat.nom_prenom}</th>
-            {/if}
-            {if $benevolat.plage == "on"}
-                <td>{$benevolat.date} au<br>{$benevolat.date_fin}</td>
-            {else}
-                <td>{$benevolat.date}</td>
-            {/if}
-            <td class="num">{$benevolat.heures}</td>
-            <td class="num">{$benevolat.taux_horaire} {$config.monnaie}/h</td>
-            <td>{$benevolat.categorie}</td>
-            <td>{$benevolat.description_courte}{if strlen($benevolat.description) >= 30}…{/if}</td>
-            <td class="actions">
-                <a class="icn" href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id}" title="Voir les enregistrements">𝍢</a>
-                {if $session->canAccess('membres', Garradin\Membres::DROIT_ADMIN)}
-                    <a class="icn" href="{plugin_url file="benevolat_modifier.php"}?id={$benevolat.id}" title="Modifier">✎</a>
-                    <a class="icn" href="{plugin_url file="benevolat_supprimer.php"}?id={$benevolat.id}" title="Supprimer">✘</a>
-                {/if}
-            </td>
-        </tr>
-    {/foreach}
-    </tbody>
-</table>
-
     <form method="post" action="{$self_url}">
         <fieldset>
             <legend>Ajouter une contribution bénévole</legend>
@@ -61,7 +19,7 @@
                     <input list="lst_membre" type="text" id="f_membre" autocomplete="off" required="required" placeholder="Entrer les premières lettres du nom ou du prénom" size="50" >
                     <datalist id="lst_membre">
                     </datalist>
-                    <input type="hidden" name="id_membre" id="f_membre-hidden">
+                    <input type="hidden" name="id_benevole" id="f_membre-hidden">
                 </dd>
                 <dt><label for="f_plage">Contribution sur plusieurs jours</label> <input type="checkbox" name="plage" id="f_plage"/></dt>
                 <dt><label for="f_date">Date du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
@@ -69,7 +27,7 @@
                 <dt class="date_fin"><label for="f_date_fin">Date de fin du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
                 <dd class="date_fin"><input type="date" name="date_fin" id="f_date_fin"/></dd>
                 <dt><label for="f_heure">Temps de bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
-                <dd><input type="number" step="0.25" min="0" name="heure" placeholder="Durée en heure" id="f_heure"/></dd>
+                <dd><input type="number" step="0.25" min="0" name="nb_heures" placeholder="Durée en heure" id="f_heure"/></dd>
 
                 <dt><label for="f_categorie">Catégorie du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
                 <dl class="catList">
@@ -83,6 +41,18 @@
                     {/if}
                 {/foreach}
                 </dl>
+
+                {if count($projets) > 0}
+                    <dt><label for="f_projet">Projet</label></dt>
+                    <dd>
+                        <select name="projet" id="f_projet">
+                            <option value="0">-- Aucun</option>
+                            {foreach from=$projets key="id" item="libelle"}
+                                <option value="{$id}"{form_field name="projet" selected=$id}>{$libelle}</option>
+                            {/foreach}
+                        </select>
+                    </dd>
+                {/if}
 
                 <dt><label for="f_description">Description de l'activité</label></dt>
                 <dd><textarea name="description" id="f_description" rows="4" cols="30">{form_field name=description}</textarea></dd>

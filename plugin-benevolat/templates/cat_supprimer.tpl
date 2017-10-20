@@ -1,5 +1,6 @@
 {include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
 {include file="%s/templates/_menu.tpl"|args:$plugin_root current="categorie"}
+{include file="%s/templates/_menu_categorie.tpl"|args:$plugin_root current="supprimer"}
 
 {form_errors}
 

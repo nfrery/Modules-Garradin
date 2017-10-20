@@ -9,17 +9,18 @@
 {if empty($liste_cat)}
     <p>Veuillez ajouter une <a href="{plugin_url}categorie.php">catégorie</a> pour pouvoir commencer à enregistrer des contributions bénévoles.</p>
 {else}
+
 <p>Note: Seul l'ajout d'un contribution d'un membre inscrit sur Garradin est actuellement possible.</p>
     <form method="post" action="{$self_url}">
         <fieldset>
             <legend>Ajouter une contribution bénévole</legend>
             <dl>
-                <dt><label>Contribution réalisée par plusieurs membres </label><input type="checkbox" name="benevole_non_membre" id="f_benevole_non_membre"></dt>
+                <dt><label for="f_benevole_non_membre">Contribution réalisée par plusieurs membres </label><input type="checkbox" name="benevole_non_membre" id="f_benevole_non_membre"></dt>
                 <dt class="nombenevole"><label for="f_nom_benevole">Noms et prénoms des bénévoles<b title="(Champ obligatoire)">obligatoire</b></label></dt>
                 <dd class="nombenevole"><textarea name="nom_benevole" id="f_nom_benevole" rows="4" cols="30"></textarea></dd>
                 <dt class="idbenevole"><label for="f_membre">Personne bénévole<b title="(Champ obligatoire)">obligatoire</b></label></dt>
                 <dd class="idbenevole">
-                    <input list="lst_membre" type="text" id="f_membre" autocomplete="off" required="required" placeholder="Entrer les premières lettres du nom ou du prénom" size="50" >
+                    <input list="lst_membre" type="text" id="f_membre" autocomplete="off" required="required" placeholder="Entrer les premières lettres du nom ou du prénom" size="50">
                     <datalist id="lst_membre">
                     </datalist>
                     <input type="hidden" name="id_benevole" id="f_membre-hidden">
@@ -122,34 +123,36 @@
     } ());
     {/literal}
 </script>
-{*Merci au créateur de plugin-matos pour cette partie*}
 {literal}
 <script type="text/javascript">
-
     document.querySelector('input[list]').addEventListener('input', function(e) {
-
         var input = e.target,
             list = input.getAttribute('list'),
             dataList = document.querySelector("#" + list),
             hiddenInput = document.getElementById(input.id + '-hidden');
-
-        garradin.load('{/literal}{$self_url}{literal}?q=' + escape(input.value), function(data) {
-
-            dataList.innerHTML = '';
-
-            var jsonOptions = JSON.parse(data);
-            jsonOptions.forEach(function (item) {
+        if(input.value.length > 2)
+        {
+            garradin.load('{/literal}{$self_url}{literal}&q=' + encodeURI(input.value), function(data)
+            {
+                dataList.innerHTML = '';
+                var jsonOptions = JSON.parse(data);
+               jsonOptions.forEach(function (item)
+                {
+                    console.log(dataList);
+                    var option = document.createElement('option');
+                    option.value = item.value;
+                    option.innerHTML = item.value;
+                    option.setAttribute('data-value', item.id);
+                    dataList.appendChild(option);
+                });
                 var option = document.createElement('option');
-                option.value = item.value;
-                option.innerHTML = item.value;
-                option.setAttribute('data-value', item.id);
-                dataList.appendChild(option);
-            });
-        });
-
-
+               option.value = input.value;
+               option.innerHTML = input.value;
+               option.setAttribute('data-value', 0);
+               dataList.appendChild(option);
+           });
+        }
         var selectedOption = document.querySelector("#" + list + " option[value='"+input.value+"']");
-
         if(selectedOption) {
             var value2send = selectedOption.getAttribute('data-value');
             if(value2send) {

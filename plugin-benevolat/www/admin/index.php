@@ -29,29 +29,33 @@ if ($q = qg('q'))
 }
 
 $benevolat = new Plugin\Benevolat\BD;
-$journal = new Journal;
-
 $ok = false;
 
 if (f('add') && $form->check('add_benevolat'))
 {
-    try {
-        $data_benevolat = [
-            'nb_heures'         =>  f('nb_heures'),
-            'id_categorie'      =>  f('id_categorie'),
-            'id_benevole'       =>  f('id_benevole'),
-            'nom_benevole'      =>  f('nom_benevole'),
-            'description'       =>  f('description'),
-            'date'              =>  f('date'),
-            'plage'             =>  f('plage'),
-            'date_fin'          =>  f('date_fin'),
-        ];
-        $data_journal = [
-            'date'              =>  f('date'),
-            'id_auteur'         =>  $session->getUser()->id,
-            'id_projet'         =>  f('projet'),
-        ];
+    $data_benevolat = [
+    'nb_heures'         =>  f('nb_heures'),
+    'id_categorie'      =>  f('id_categorie'),
+    'id_benevole'       =>  f('id_benevole'),
+    'nom_benevole'      =>  f('nom_benevole'),
+    'description'       =>  f('description'),
+    'date'              =>  f('date'),
+    'plage'             =>  f('plage'),
+    'date_fin'          =>  f('date_fin'),
+    ];
 
+    $data_journal = [
+        'date'              =>  f('date'),
+        'id_auteur'         =>  $session->getUser()->id,
+        'id_projet'         =>  f('projet'),
+    ];
+
+    if(empty(f('id_benevole')))
+    {
+        $data_benevolat['nom_benevole'] = f('f_membre');
+    }
+
+    try {
         $id = $benevolat->addBenevolat($data_benevolat, $data_journal);
         utils::redirect(PLUGIN_URL . 'index.php?add_ben_ok='.(int)$id);
     }

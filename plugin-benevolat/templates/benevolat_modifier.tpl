@@ -107,6 +107,24 @@
             }
         };
 
+        window.test = function ()
+        {
+            var cb = $('#f_benevole_non_membre');
+            var nom = $('#f_nom_benevole');
+            var id = $('#f_membre');
+            var id_ben = $('#f_membre-hidden');
+            if('{/literal}{form_field name=nom_membre data=$contribution}{literal}' === '')
+            {
+                g.toggle('.nombenevole', true);
+                g.toggle('.idbenevole', false);
+                nom.required = true;
+                id.required = false;
+                id_ben.value = null;
+                cb.checked = true;
+            }
+        };
+
+        test();
         changeTypeDuree();
         changeBenevole();
 

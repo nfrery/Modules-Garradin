@@ -1,4 +1,4 @@
-{include file="admin/_head.tpl" title="Configuration — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
+{include file="admin/_head.tpl" title="%s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
 {include file="%s/templates/_menu.tpl"|args:$plugin_root current="config"}
 
 {form_errors}

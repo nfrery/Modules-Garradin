@@ -1,4 +1,3 @@
-
 {include file="admin/_head.tpl" title="Compte de résultat — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id body_id="rapport" js=1}
 {if $current_exercice == '0'}
     {include file="%s/templates/_menu.tpl"|args:$plugin_root current="compte_resultat"}

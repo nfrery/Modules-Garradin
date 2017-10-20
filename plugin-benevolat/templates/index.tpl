@@ -1,4 +1,4 @@
-{include file="admin/_head.tpl" title="Extension — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
+{include file="admin/_head.tpl" title="%s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id}
 {include file="%s/templates/_menu.tpl"|args:$plugin_root current="index"}
 
 {form_errors}
@@ -6,10 +6,10 @@
     <p class="confirm">{$ok}</p>
 {/if}
 
-<h1>Attention</h1>
-<p>Ce plugin est en pleine refonte. Les futurs contributions bénévoles seront directement intégrées dans la comptabilité de Garradin (actuellement le journal n'est pas rempli).</p>
-<p>C'est pourquoi il faut pour l'instant éviter d'ajouter des contributions bénévoles sur le formulaire ci-dessous. Le développeur travail pour sortir une nouvelle version le plus rapidement possible.</p>
-
+{if empty($liste_cat)}
+    <p>Veuillez ajouter une <a href="{plugin_url}categorie.php">catégorie</a> pour pouvoir commencer à enregistrer des contributions bénévoles.</p>
+{else}
+<p>Note: Seul l'ajout d'un contribution d'un membre inscrit sur Garradin est actuellement possible.</p>
     <form method="post" action="{$self_url}">
         <fieldset>
             <legend>Ajouter une contribution bénévole</legend>
@@ -134,5 +134,6 @@
     });
 </script>
 {/literal}
+{/if}
 
 {include file="admin/_foot.tpl"}

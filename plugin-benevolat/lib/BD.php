@@ -237,16 +237,16 @@ class BD
         $db = DB::getInstance();
 
         $res = $db->prepare('SELECT p.id,
-strftime(\'%d/%m/%Y\', date) AS date,
-strftime(\'%d/%m/%Y\', date_fin) AS date_fin,
-(SELECT nom FROM membres WHERE id = p.id_membre) AS benevole,
-p.heures,
-(SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS taux_horaire,
-(SELECT nom FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS nom_cat,
-(SELECT (taux_horaire * p.heures) FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS valorise,
-description
-FROM plugin_benevolat_enregistrement AS p
-ORDER BY date(date) ASC;')->execute();
+            strftime(\'%d/%m/%Y\', date) AS date,
+            strftime(\'%d/%m/%Y\', date_fin) AS date_fin,
+            (SELECT nom FROM membres WHERE id = p.id_benevole) AS benevole,
+            p.nb_heures,
+            (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS taux_horaire,
+            (SELECT nom FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS nom_cat,
+            (SELECT (taux_horaire * p.nb_heures) FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS valorise,
+            description
+            FROM plugin_benevolat_enregistrement AS p
+            ORDER BY date(date) ASC;')->execute();
 
         $fp = fopen('php://output', 'w');
 

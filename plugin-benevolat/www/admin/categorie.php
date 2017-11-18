@@ -2,8 +2,6 @@
 
 namespace Garradin;
 
-$session->requireAccess('config', Membres::DROIT_ECRITURE);
-
 $benevolat = new Plugin\Benevolat\BD();
 
 $ok = false;

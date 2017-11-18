@@ -2,6 +2,8 @@
 
 namespace Garradin;
 
+$session->requireAccess('compta', Membres::DROIT_ACCES);
+
 $bd= new Plugin\Benevolat\BD;
 $rapports = new Compta\Rapports;
 

@@ -4,8 +4,6 @@ namespace Garradin;
 
 use Garradin\Plugin\Benevolat\BD;
 
-$session->requireAccess('config', Membres::DROIT_ECRITURE);
-
 $benevolat = new BD();
 
 $enregistrements = $benevolat->getEnregistrementsCategorie(qg('id'));

@@ -10,8 +10,8 @@
 {/if}
 
 <fieldset>
+    <legend>Exportation</legend>
     <dl>
-        <dt>Exportation</dt>
         <dd><a href="{plugin_url}config.php?export">Exporter l'ensemble des contributions bénévoles au format CSV</a></dd>
     </dl>
 </fieldset>

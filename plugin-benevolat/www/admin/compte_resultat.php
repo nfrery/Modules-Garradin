@@ -12,6 +12,9 @@ $current_projet = (int)qg('projet') ?: 0;
 $compte_resultat = $rapports->compteResultat(['id_exercice' => qg('exercice')]);
 $compte_benevolat =  $bd->compteResultatBenevolat(['id_exercice' => qg('exercice')]);
 
+$compte_benevolat['produits']['general'] = $compte_benevolat['produits']['total'] + $compte_resultat['produits']['total'];
+$compte_benevolat['charges']['general'] = $compte_benevolat['charges']['total'] + $compte_resultat['charges']['total'];
+
 $tpl->assign('liste_exercices', $liste_exercices);
 $tpl->assign('current_exercice', $current_exercice);
 $tpl->assign('current_projet', $current_projet);

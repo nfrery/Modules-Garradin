@@ -15,6 +15,29 @@
  $contribution = $benevolat->getEnregistrement(qg('id'));
  $categories = $benevolat->getListeCategories();
 
+ if ($q = qg('q'))
+ {
+     $aResult = [];
+     if (!empty($q))
+     {
+         $membres       = new Membres;
+         $membres_liste = $membres->search('nom', $q);
+
+         $i = 0;
+         foreach ($membres_liste as $membre) {
+             $a = (array)$membre;
+             $aResult[$i]['id']    =  $a['id'];
+             $aResult[$i]['value'] =  $a['nom'];
+             if (!empty($a['email'])) {
+                 $aResult[$i]['value'] .= ' (' . $a['email'] . ')';
+             }
+             $i++;
+         }
+     }
+     echo json_encode($aResult);
+     exit;
+ }
+
  if(empty($contribution))
  {
      throw new UserException('Cette contribution n\'existe pas.');
@@ -24,10 +47,10 @@ if(f('add') && $form->check('edit_contribution'))
 {
     try {
         $data_benevolat = [
-            'nb_heures'         =>  f('nb_heures'),
+            'heures'         =>  f('nb_heures'),
             'id_categorie'      =>  f('id_categorie'),
-            'id_benevole'       =>  f('id_benevole'),
-            'nom_benevole'      =>  f('nom_benevole'),
+            'id_membre'       =>  f('id_benevole'),
+            'nom_prenom'      =>  f('nom_benevole'),
             'description'       =>  f('description'),
             'date'              =>  f('date'),
             'plage'             =>  f('plage'),

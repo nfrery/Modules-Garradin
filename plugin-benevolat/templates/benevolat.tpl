@@ -19,7 +19,7 @@
     {foreach from=$liste item="benevolat"}
         <tr>
             <td><a href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id}">{$benevolat.id}</a></td>
-            {if $benevolat.id_benevole != NULL}
+            {if $benevolat.id_membre != NULL}
                 <th>{$benevolat.nom_membre}</th>
             {else}
                 <th>{$benevolat.nom_benevole}</th>
@@ -29,7 +29,7 @@
             {else}
                 <td>{$benevolat.date}</td>
             {/if}
-            <td class="num">{$benevolat.nb_heures}</td>
+            <td class="num">{$benevolat.heures}</td>
             <td class="num">{$benevolat.taux_horaire} {$config.monnaie}/h</td>
             <td>{$benevolat.categorie}</td>
             <td class="num">{$benevolat.valorise} {$config.monnaie}</td>

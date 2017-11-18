@@ -14,7 +14,7 @@
                 <input list="lst_membre" type="text" id="f_membre" autocomplete="off" required="required" placeholder="Entrer les premières lettres du nom ou du prénom" size="50" value="{form_field name=nom_membre data=$contribution}">
                 <datalist id="lst_membre">
                 </datalist>
-                <input type="hidden" name="id_benevole" id="f_membre-hidden" value="{form_field name=id_benevole data=$contribution}">
+                <input type="hidden" name="id_benevole" id="f_membre-hidden" value="{form_field name=id_membre data=$contribution}">
             </dd>
             <dt><label for="f_plage">Contribution sur plusieurs jours</label> <input type="checkbox" name="plage" id="f_plage" {if $contribution.plage == 'on'}checked{/if}/></dt>
             <dt><label for="f_date">Date du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
@@ -23,7 +23,7 @@
             <dd class="date_fin"><input type="date" name="date_fin" id="f_date_fin" value="{form_field name=date_fin data=$contribution}"/></dd>
 
             <dt><label for="f_heure">Temps de bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
-            <dd><input type="number" step="0.25" min="0" name="nb_heures" placeholder="Durée en heure" id="f_heure" value="{form_field name=nb_heures data=$contribution}"/></dd>
+            <dd><input type="number" step="0.25" min="0" name="nb_heures" placeholder="Durée en heure" id="f_heure" value="{form_field name=heures data=$contribution}"/></dd>
 
             <dt><label for="f_categorie">Catégorie du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
             <dl class="catList">
@@ -135,31 +135,34 @@
 </script>
 {literal}
 <script type="text/javascript">
-
     document.querySelector('input[list]').addEventListener('input', function(e) {
-
         var input = e.target,
             list = input.getAttribute('list'),
             dataList = document.querySelector("#" + list),
             hiddenInput = document.getElementById(input.id + '-hidden');
-
-        garradin.load('{/literal}{$self_url}{literal}?q=' + escape(input.value), function(data) {
-
-            dataList.innerHTML = '';
-
-            var jsonOptions = JSON.parse(data);
-            jsonOptions.forEach(function (item) {
+        if(input.value.length > 2)
+        {
+            garradin.load('{/literal}{$self_url}{literal}&q=' + encodeURI(input.value), function(data)
+            {
+                dataList.innerHTML = '';
+                var jsonOptions = JSON.parse(data);
+                jsonOptions.forEach(function (item)
+                {
+                    console.log(dataList);
+                    var option = document.createElement('option');
+                    option.value = item.value;
+                    option.innerHTML = item.value;
+                    option.setAttribute('data-value', item.id);
+                    dataList.appendChild(option);
+                });
                 var option = document.createElement('option');
-                option.value = item.value;
-                option.innerHTML = item.value;
-                option.setAttribute('data-value', item.id);
+                option.value = input.value;
+                option.innerHTML = input.value;
+                option.setAttribute('data-value', 0);
                 dataList.appendChild(option);
             });
-        });
-
-
+        }
         var selectedOption = document.querySelector("#" + list + " option[value='"+input.value+"']");
-
         if(selectedOption) {
             var value2send = selectedOption.getAttribute('data-value');
             if(value2send) {

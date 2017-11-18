@@ -8,9 +8,9 @@
 
 <dl class="describe">
 <dt><label>Personne bénévole</label></dt>
-    {if $contribution.id_benevole != NULL}
+    {if $contribution.id_membre != NULL}
         <dd>{if $session->canAccess('compta', Garradin\Membres::DROIT_ACCES)}
-                <a href="{$admin_url}membres/fiche.php?id={$contribution.id_benevole}">{$contribution.nom_membre}</a>
+                <a href="{$admin_url}membres/fiche.php?id={$contribution.id_membre}">{$contribution.nom_membre}</a>
             {else}
                 {$contribution.nom_membre}
             {/if}</dd>
@@ -24,7 +24,7 @@
         <dd>{$contribution.date}</dd>
     {/if}
     <dt><label>Durée</label></dt>
-    <dd>{$contribution.nb_heures} heures</dd>
+    <dd>{$contribution.heures} heures</dd>
     <dt><label>Catégorie</label></dt>
     <dd><a href='{plugin_url}cat_voir.php?id={$contribution.id_categorie}'>{$contribution.categorie}</a> à {$contribution.taux_horaire}€/h</dd>
     <dt><label>Bénévolat valorisé</label></dt>

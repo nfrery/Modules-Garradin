@@ -5,6 +5,8 @@ namespace Garradin;
 use Garradin\Compta\Exercices;
 use Garradin\Compta\Journal;
 
+if ($plugin->needUpgrade()) $plugin->upgrade();
+
 if ($q = qg('q'))
 {
     $aResult = [];
@@ -34,10 +36,10 @@ $ok = false;
 if (f('add') && $form->check('add_benevolat'))
 {
     $data_benevolat = [
-    'nb_heures'         =>  f('nb_heures'),
+    'heures'         =>  f('nb_heures'),
     'id_categorie'      =>  f('id_categorie'),
-    'id_benevole'       =>  f('id_benevole'),
-    'nom_benevole'      =>  f('nom_benevole'),
+    'id_membre'       =>  f('id_benevole'),
+    'nom_prenom'      =>  f('nom_benevole'),
     'description'       =>  f('description'),
     'date'              =>  f('date'),
     'plage'             =>  f('plage'),

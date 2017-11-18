@@ -80,7 +80,7 @@ class BD
         $this->_checkFieldsContribution($data_benevolat);
 
         $data_journal['libelle'] = 'Contribution bénévole';
-        $data_journal['montant'] = $data_benevolat['nb_heures'] * $this->getTauxHoraire($data_benevolat['id_categorie']);
+        $data_journal['montant'] = $data_benevolat['heures'] * $this->getTauxHoraire($data_benevolat['id_categorie']);
         $data_journal['compte_debit'] = '864';
         $data_journal['compte_credit'] = '870';
         $data_journal['remarques'] = 'Pour supprimer cette opération, utiliser le plugin bénévolat.';
@@ -98,7 +98,7 @@ class BD
         $this->_checkFieldsContribution($data_benevolat);
 
         $data_journal['libelle'] = 'Contribution bénévole';
-        $data_journal['montant'] = $data_benevolat['nb_heures'] * $this->getTauxHoraire($data_benevolat['id_categorie']);
+        $data_journal['montant'] = $data_benevolat['heures'] * $this->getTauxHoraire($data_benevolat['id_categorie']);
         $data_journal['compte_debit'] = '864';
         $data_journal['compte_credit'] = '870';
         $data_journal['remarques'] = 'Pour supprimer cette opération, utiliser le plugin bénévolat.';
@@ -127,12 +127,12 @@ class BD
         $db = DB::getInstance();
         return $db->first("SELECT ben.*,
             (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
-            (SELECT nom FROM membres WHERE id = ben.id_benevole) AS nom_membre,
+            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom_membre,
 			(SELECT id_auteur FORM FROM compta_journal WHERE id = ben.id_compta) AS id_auteur,
             (SELECT nom FROM membres WHERE id = (SELECT id_auteur FROM compta_journal WHERE id = ben.id_compta)) AS nom_auteur,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie,
-            (SELECT (taux_horaire * ben.nb_heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise,
+            (SELECT (taux_horaire * ben.heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise,
 			(SELECT id_projet FROM compta_journal WHERE id = ben.id_compta) AS id_projet,
 			(SELECT libelle FROM compta_projets WHERE id = (SELECT id_projet FROM compta_journal WHERE id = ben.id_compta)) AS libelle_projet,
 			(SELECT id_exercice FROM compta_journal WHERE id = ben.id_compta) AS id_exercice
@@ -174,10 +174,10 @@ class BD
         $db = DB::getInstance();
         return $db->get("SELECT ben.*,
             (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
-            (SELECT nom FROM membres WHERE id = ben.id_benevole) AS nom_membre,
+            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom_membre,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie,
-            (SELECT (taux_horaire * ben.nb_heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
+            (SELECT (taux_horaire * ben.heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
             FROM plugin_benevolat_enregistrement AS ben;");
     }
 
@@ -204,10 +204,10 @@ class BD
     {
         $db = DB::getInstance();
         return $db->get("SELECT ben.*,
-            (SELECT nom FROM membres WHERE id = ben.id_benevole) AS nom_membre,
+            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom_membre,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie,
-            (SELECT (taux_horaire * ben.nb_heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
+            (SELECT (taux_horaire * ben.heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
             FROM plugin_benevolat_enregistrement AS ben
             WHERE id_categorie = :id;",['id' => (int) $id]);
     }
@@ -216,7 +216,7 @@ class BD
     {
         $db = DB::getInstance();
         return $db->get("SELECT cat.*,
-            (SELECT TOTAL(nb_heures) FROM plugin_benevolat_enregistrement WHERE id_categorie = cat.id) AS nb_heures
+            (SELECT TOTAL(heures) FROM plugin_benevolat_enregistrement WHERE id_categorie = cat.id) AS nb_heures
             FROM plugin_benevolat_categorie AS cat;");
     }
 
@@ -239,11 +239,11 @@ class BD
         $res = $db->prepare('SELECT p.id,
             strftime(\'%d/%m/%Y\', date) AS date,
             strftime(\'%d/%m/%Y\', date_fin) AS date_fin,
-            (SELECT nom FROM membres WHERE id = p.id_benevole) AS benevole,
-            p.nb_heures,
+            (SELECT nom FROM membres WHERE id = p.id_membre) AS benevole,
+            p.heures,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS nom_cat,
-            (SELECT (taux_horaire * p.nb_heures) FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS valorise,
+            (SELECT (taux_horaire * p.heures) FROM plugin_benevolat_categorie WHERE id = p.id_categorie) AS valorise,
             description
             FROM plugin_benevolat_enregistrement AS p
             ORDER BY date(date) ASC;')->execute();
@@ -281,6 +281,14 @@ class BD
 
         return implode(' AND ', $where);
     }
+
+    public function RAZ_table()
+    {
+        $db = DB::getInstance();
+        $db->exec(file_get_contents(dirname(__FILE__) . "/../data/schema_remove.sql"));
+        $db->exec(file_get_contents(dirname(__FILE__) . "/../data/schema.sql"));
+    }
+
 
     public function compteResultatBenevolat(array $criterias)
     {
@@ -345,9 +353,6 @@ class BD
         $res->finalize();
 
         $resultat = $produits['total'] - $charges['total'];
-
-        //$compte_benevolat['produits']['general'] = $compte_resultat['produits']['total'] + $compte_benevolat['produits']['total'];
-        //$compte_benevolat['charges']['general'] = $compte_resultat['charges']['total'] + $compte_benevolat['charges']['total'];
 
         return ['charges' => $charges, 'produits' => $produits, 'resultat' => $resultat];
     }

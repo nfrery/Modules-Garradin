@@ -269,6 +269,13 @@ class BD
             FROM compta_exercices ORDER BY id DESC;');
     }
 
+    public function getListeProjets()
+    {
+        $db = DB::getInstance();
+        return $db->getAssoc('SELECT *
+            FROM compta_projets ORDER BY libelle DESC;');
+    }
+
     protected function getWhereClause(array $criterias)
     {
         $where = [];

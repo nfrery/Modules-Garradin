@@ -1,9 +1,21 @@
-{include file="admin/_head.tpl" title="Compte de résultat — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id body_id="rapport" js=1}
-{if $current_exercice == '0'}
+{if !isset($projet) AND !isset($exercice)}
+    {include file="admin/_head.tpl" title="Compte de résultat — %s"|args:$plugin.nom current="plugin_%s"|args:$plugin.id body_id="rapport" js=1}
     {include file="%s/templates/_menu.tpl"|args:$plugin_root current="compte_resultat"}
+{else}
+    {include file="admin/_head.tpl" title="Compte de résultat" body_id="rapport" js=1}
+    <div class="exercice">
+        <h2>{$config.nom_asso}</h2>
+        {if isset($projet)}
+            <h3>Projet&nbsp;: {$projet.libelle}</h3>
+        {else}
+            <p>Exercice comptable {if $exercice.cloture}clôturé{else}en cours{/if} du
+                {$exercice.debut|date_fr:'d/m/Y'} au {$exercice.fin|date_fr:'d/m/Y'}, généré le {$cloture|date_fr:'d/m/Y'}</p>
+        {/if}
+    </div>
+
 {/if}
 
-{if $current_exercice == '0'}
+{if !isset($projet) AND !isset($exercice)}
     <form method="get" action="{$self_url}" class="shortFormLeft">
         <fieldset>
             <legend>Filtrer par exercice</legend>
@@ -16,6 +28,20 @@
             <noscript><input type="submit" value="Filtrer &rarr;" /></noscript>
         </fieldset>
     </form>
+    {if $liste_projets != null}
+    <form method="get" action="{$self_url}" class="shortFormLeft">
+        <fieldset>
+            <legend>Filtrer par projet</legend>
+            <select name="projet" id="f_projet" onchange="this.form.submit();">
+                <option value="0" selected="selected">Selectionner un exercice</option>
+                {foreach from=$liste_projets key="id" item="libelle"}
+                    <option value="{$id}">{$libelle}</option>
+                {/foreach}
+            </select>
+            <noscript><input type="submit" value="Filtrer &rarr;" /></noscript>
+        </fieldset>
+    </form>
+    {/if}
 {else}
 <table>
     <colgroup>

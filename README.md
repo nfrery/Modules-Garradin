@@ -26,11 +26,10 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 ## Liste des modules en cours de réalisation
 * plugin-bicycode (fonctionne avec 0.8.0): permet la tenue du registre pour les opérateurs bicycode. Pour plus d'info sur ce service [bicycode.org](https://www.bicycode.org/le-bicycode.rub-2/qu-est-ce-que-c-est.rub-68/).
 * plugin-cotisation-avancee: Permet une saisie avancée lors de l'enregistrement d'une cotisation. Prend en compte les prestataires de services (467x) tel que iZettle, HelloAsso, etc pour ne pas débiter directement le compte courant (512x) de l'association. Il enregistre les chèques comme étant à encaisser (5112).
-* plugin-boiteaoutils: export de la liste des membres suivant certains critères, afficher la localisation des membres sur une carte (heatmap), enregistrement de requêtes SQL pour faciliter la vie, etc. Ce plugin remplacera plugin-recherche-avancee qui n'a pas encore été publié sur ce dépôt.
+* plugin-requeteur: Entrepose et execute vos requêtes SQL en lecture seule.
 
 ## Liste des modules au stade d'idées
 
-* plugin-recherche-avancee: module qui permet, comme son nom l'indique, d'effectuer des recherches avancées sur la base de données. Il permet d'échapper à la rédaction de requêtes SQL.
 * plugin-fluxbb: module qui sert à faire une liaison entre Garradin et FluxBB. Les membres qui sont à jours de cotisation sur Garradin vont soit avoir un profil, créé par le plugin, sur FluxBB, soit être relié à leurs profils sur FluxBB. Cela permettra de les intégrers à un groupe Adhérents sur FluxBB tant qu'ils seront à jour de cotisation.
 * plugin-vote: module qui permet d'organiser des votes lors d'AGO et d'AGE. Chaque membre à jour de cotisation peut voter. Seul les membres d'un group défini par l'admin peuvent gérer les votes.
 * plugin-categorie: Sert à fixer une catégorie à une saisie avancée en compta. Permet d'inclure la saisie dans les dépenses ou les recettes.

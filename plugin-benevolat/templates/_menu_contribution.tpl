@@ -1,6 +1,6 @@
 <ul class="actions">
     <li{if $current == 'contribution'} class="current"{/if}><a href="{plugin_url file="benevolat_voir.php?id=%s"|args:$contribution.id}">Contribution n°{$contribution.id}</a></li>
-    {if $session->canAccess('membres', Garradin\Membres::DROIT_ADMIN) OR $session->getUser()->id == $contribution->id_membre}
+    {if $session->canAccess('membres', Garradin\Membres::DROIT_ADMIN) OR $session->getUser()->id == $contribution->id_benevole}
         <li{if $current == 'modifier'} class="current"{/if}><a href="{plugin_url file="benevolat_modifier.php?id=%s"|args:$contribution.id}">Modifier ce bénévolat</a></li>
     {/if}
     {if $session->canAccess('membres', Garradin\Membres::DROIT_ADMIN)}

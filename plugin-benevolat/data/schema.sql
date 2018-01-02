@@ -1,13 +1,13 @@
 
 CREATE TABLE IF NOT EXISTS `plugin_benevolat_enregistrement` (
-  `id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+  `id`	INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
   `id_compta`	INTEGER UNIQUE,
-  `nb_heures`	INTEGER NOT NULL,
-  `id_categorie`	INTEGER NOT NULL,
+  `heures`	INTEGER,
+  `id_categorie`	INTEGER,
   `id_benevole`	INTEGER,
   `nom_benevole`	TEXT,
   `description`	TEXT,
-  `date`	TEXT NOT NULL DEFAULT CURRENT_DATE,
+  `date`	TEXT DEFAULT CURRENT_DATE,
   `plage`	INTEGER DEFAULT 0,
   `date_fin`	TEXT,
   FOREIGN KEY(`id_compta`) REFERENCES `compta_journal`(`id`) ON DELETE RESTRICT,

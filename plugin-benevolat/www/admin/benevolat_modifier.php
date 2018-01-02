@@ -49,8 +49,8 @@ if(f('add') && $form->check('edit_contribution'))
         $data_benevolat = [
             'heures'         =>  f('nb_heures'),
             'id_categorie'      =>  f('id_categorie'),
-            'id_membre'       =>  f('id_benevole'),
-            'nom_prenom'      =>  f('nom_benevole'),
+            'id_benevole'       =>  f('id_benevole'),
+            'nom_benevole'      =>  f('nom_benevole'),
             'description'       =>  f('description'),
             'date'              =>  f('date'),
             'plage'             =>  f('plage'),

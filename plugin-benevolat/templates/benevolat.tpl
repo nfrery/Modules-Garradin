@@ -19,7 +19,7 @@
     {foreach from=$liste item="benevolat"}
         <tr>
             <td><a href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id}">{$benevolat.id}</a></td>
-            {if $benevolat.id_membre != NULL}
+            {if $benevolat.id_benevole != NULL}
                 <th>{$benevolat.nom_membre}</th>
             {else}
                 <th>{$benevolat.nom_benevole}</th>

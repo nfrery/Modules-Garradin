@@ -127,7 +127,7 @@ class BD
         $db = DB::getInstance();
         return $db->first("SELECT ben.*,
             (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
-            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom_membre,
+            (SELECT nom FROM membres WHERE id = ben.id_benevole) AS nom_membre,
 			(SELECT id_auteur FORM FROM compta_journal WHERE id = ben.id_compta) AS id_auteur,
             (SELECT nom FROM membres WHERE id = (SELECT id_auteur FROM compta_journal WHERE id = ben.id_compta)) AS nom_auteur,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
@@ -174,7 +174,7 @@ class BD
         $db = DB::getInstance();
         return $db->get("SELECT ben.*,
             (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
-            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom_membre,
+            (SELECT nom FROM membres WHERE id = ben.id_benevole) AS nom_membre,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie,
             (SELECT (taux_horaire * ben.heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise
@@ -186,7 +186,7 @@ class BD
         $db = DB::getInstance();
         return $db->get("SELECT ben.*,
             (SELECT SUBSTR(ben.description,0,50)) AS description_courte,
-            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom,
+            (SELECT nom FROM membres WHERE id = ben.id_benevole) AS nom,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie
             FROM plugin_benevolat_enregistrement AS ben ORDER BY id DESC LIMIT 5;");
@@ -204,7 +204,7 @@ class BD
     {
         $db = DB::getInstance();
         return $db->get("SELECT ben.*,
-            (SELECT nom FROM membres WHERE id = ben.id_membre) AS nom_membre,
+            (SELECT nom FROM membres WHERE id = ben.id_benevole) AS nom_membre,
             (SELECT taux_horaire FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS taux_horaire,
             (SELECT nom FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS categorie,
             (SELECT (taux_horaire * ben.heures) FROM plugin_benevolat_categorie WHERE id = ben.id_categorie) AS valorise

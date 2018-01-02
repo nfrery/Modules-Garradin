@@ -9,7 +9,7 @@
     <fieldset>
         <legend>Supprimer une contribution bénévole</legend>
         <h3 class="warning">
-            Êtes-vous sûr de vouloir supprimer la contribution de «&nbsp;{if $contribution.id_membre != NULL}{$contribution.nom_membre}{else}{$contribution.nom_prenom}{/if}&nbsp;»
+            Êtes-vous sûr de vouloir supprimer la contribution de «&nbsp;{if $contribution.id_benevole != NULL}{$contribution.nom_membre}{else}{$contribution.nom_prenom}{/if}&nbsp;»
             du {$contribution.date} ?
         </h3>
     </fieldset>

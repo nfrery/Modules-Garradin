@@ -14,7 +14,7 @@
                 <input list="lst_membre" type="text" id="f_membre" autocomplete="off" required="required" placeholder="Entrer les premières lettres du nom ou du prénom" size="50" value="{form_field name=nom_membre data=$contribution}">
                 <datalist id="lst_membre">
                 </datalist>
-                <input type="hidden" name="id_benevole" id="f_membre-hidden" value="{form_field name=id_membre data=$contribution}">
+                <input type="hidden" name="id_benevole" id="f_membre-hidden" value="{form_field name=id_benevole data=$contribution}">
             </dd>
             <dt><label for="f_plage">Contribution sur plusieurs jours</label> <input type="checkbox" name="plage" id="f_plage" {if $contribution.plage == 'on'}checked{/if}/></dt>
             <dt><label for="f_date">Date du bénévolat</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
@@ -51,7 +51,7 @@
             {/if}
 
             <dt><label for="f_description">Description de l'activité</label> <b title="(Champ obligatoire)">obligatoire</b></dt>
-            <dd><textarea name="description" id="f_description" rows="4" cols="30" >{form_field name=description}</textarea></dd>
+            <dd><textarea name="description" id="f_description" rows="4" cols="30" >{form_field name=description data=$contribution}</textarea></dd>
         </dl>
         <input type="hidden" value="{$contribution.id_compta}">
     </fieldset>

@@ -3,6 +3,12 @@
 Dépôt **non officiel** de différents modules pour Garradin.
 Ils ont été réalisé par et pour l'administration d'une association.
 
+## Aide, demande, question
+
+Une liste de discussion est disponible pour échanger, s'entraider, poser vos questions et demander des modifications pour les plugins présent sur ce dépôt.
+Pour s'abonner: https://framalistes.org/sympa/subscribe/module_garradin_nfrery
+Pour se désabonner: https://framalistes.org/sympa/sigrequest/module_garradin_nfrery
+
 ## Par où commencer
 
 Retrouvez l'ensemble du code des modules dans les dossiers portants leurs noms.
@@ -33,6 +39,7 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 * plugin-fluxbb: module qui sert à faire une liaison entre Garradin et FluxBB. Les membres qui sont à jours de cotisation sur Garradin vont soit avoir un profil, créé par le plugin, sur FluxBB, soit être relié à leurs profils sur FluxBB. Cela permettra de les intégrers à un groupe Adhérents sur FluxBB tant qu'ils seront à jour de cotisation.
 * plugin-vote: module qui permet d'organiser des votes lors d'AGO et d'AGE. Chaque membre à jour de cotisation peut voter. Seul les membres d'un group défini par l'admin peuvent gérer les votes.
 * plugin-categorie: Sert à fixer une catégorie à une saisie avancée en compta. Permet d'inclure la saisie dans les dépenses ou les recettes.
+* plugin-statistiques: Générateur de graphique en fonction de tout et n'importe quoi. (compta, membre, etc)
 
 ## Versionnement
 

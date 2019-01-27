@@ -22,7 +22,9 @@ Si vous souhaitez réaliser une archive vous-même des plugins en cours de déve
 Récupérer l'archive du module dans le dossier _release_  et copier le dans le dossier plugin/ de votre instance Garradin.
 L'installation du module se passe dans la rubrique Configuration->Extensions
 
-## Liste des modules présents
+## Liste des modules (>=0.9.0)
+
+## Liste des modules présents (compatible <<0.9.0)
 
 * plugin-test: plugin fourni par Garradin comme exmple pour le développement (>=0.1)
 * [plugin-recu-don](https://github.com/nfrery/Modules-Garradin/raw/master/release/recudon.tar.gz): module permettant de remplir le cerfa 11580*03 pour permettre la déduction fiscale d'un don. **Attention, ce plugin n'est pas abouti** (>=0.7.6)
@@ -40,6 +42,7 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 * plugin-vote: module qui permet d'organiser des votes lors d'AGO et d'AGE. Chaque membre à jour de cotisation peut voter. Seul les membres d'un group défini par l'admin peuvent gérer les votes.
 * plugin-categorie: Sert à fixer une catégorie à une saisie avancée en compta. Permet d'inclure la saisie dans les dépenses ou les recettes.
 * plugin-statistiques: Générateur de graphique en fonction de tout et n'importe quoi. (compta, membre, etc)
+* plugin-sms: envoi d'sms collectif, envoi de rappel automatique de cotisation (support ovhtélécom)
 
 ## Versionnement
 

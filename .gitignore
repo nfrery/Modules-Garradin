@@ -21,7 +21,12 @@ plugin-recu-don/data/signatureo.png
 
 # Dossier temporaire
 tmp/
+*.bat
 
 .idea/
 test/
 .travis.yml
+
+#Vendor Composer
+*/lib/vendor/*
+*/lib/*.lock

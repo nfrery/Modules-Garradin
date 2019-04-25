@@ -32,6 +32,7 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 * [plugin-benevolat](https://github.com/nfrery/Modules-Garradin/raw/master/release/benevolat.tar.gz): Valoriser facilement le bénévolat sur Garradin >=0.8.0
 
 ## Liste des modules en cours de réalisation
+* plugin-sms: envoi d'sms collectif, envoi de rappel automatique de cotisation (support ovhtélécom) >=0.9.2
 * plugin-bicycode (fonctionne avec 0.8.0): permet la tenue du registre pour les opérateurs bicycode. Pour plus d'info sur ce service [bicycode.org](https://www.bicycode.org/le-bicycode.rub-2/qu-est-ce-que-c-est.rub-68/).
 * plugin-cotisation-avancee: Permet une saisie avancée lors de l'enregistrement d'une cotisation. Prend en compte les prestataires de services (467x) tel que iZettle, HelloAsso, etc pour ne pas débiter directement le compte courant (512x) de l'association. Il enregistre les chèques comme étant à encaisser (5112).
 * plugin-requeteur: Entrepose et execute vos requêtes SQL en lecture seule.
@@ -42,7 +43,6 @@ L'installation du module se passe dans la rubrique Configuration->Extensions
 * plugin-vote: module qui permet d'organiser des votes lors d'AGO et d'AGE. Chaque membre à jour de cotisation peut voter. Seul les membres d'un group défini par l'admin peuvent gérer les votes.
 * plugin-categorie: Sert à fixer une catégorie à une saisie avancée en compta. Permet d'inclure la saisie dans les dépenses ou les recettes.
 * plugin-statistiques: Générateur de graphique en fonction de tout et n'importe quoi. (compta, membre, etc)
-* plugin-sms: envoi d'sms collectif, envoi de rappel automatique de cotisation (support ovhtélécom)
 
 ## Versionnement
 

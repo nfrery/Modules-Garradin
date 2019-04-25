@@ -5,6 +5,17 @@
 
 <form method="post" action="{$self_url}">
     <fieldset>
+        <legend>OVH-API:</legend>
+        <dl>
+            <dt><label for="f_akey">Application Key</label></dt>
+            <dd><input type="text" name="akey" id="f_akey"/></dd>
+            <dt><label for="f_asecret">Application Secret</label></dt>
+            <dd><input type="text" name="asecret" id="f_asecret"/></dd>
+            <dt><label for="f_ckey">Consumer Key</label></dt>
+            <dd><input type="text" name="ckey" id="f_ckey"/></dd>
+        </dl>
+    </fieldset>
+    <fieldset>
         <legend>Options:</legend>
         <dl>
             <dt><label for="f_soutien">Afficher la page <i>Nous soutenir</i></label> <input type="checkbox" name="soutien" id="f_soutien" value="1" {form_field name="soutien" checked=1 data=$plugin.config}/></dt>

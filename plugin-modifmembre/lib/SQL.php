@@ -35,7 +35,7 @@ class SQL
 				AND m.id_categorie NOT IN (SELECT id FROM membres_categories WHERE cacher = 1)
 	    	GROUP BY m.id
 		)
-		WHERE nb_jours >= 115;';
+		WHERE nb_jours >= 548;';
         $membres = (array) $db->get($query);
 
         return $membres;

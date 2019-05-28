@@ -22,7 +22,8 @@ Si vous souhaitez réaliser une archive vous-même des plugins en cours de déve
 Récupérer l'archive du module dans le dossier _release_  et copier le dans le dossier plugin/ de votre instance Garradin.
 L'installation du module se passe dans la rubrique Configuration->Extensions
 
-## Liste des modules (>=0.9.0)
+## Liste des modules (>=0.9.2)
+* [plugin-modifmembre](https://github.com/nfrery/Modules-Garradin/raw/master/release/modifmembre.tar.gz): Déplace dans la catégorie de membre 2 (ancien membre, par défaut) les membres qui n'ont pas cotisé depuis 18 mois (548 jours).
 
 ## Liste des modules présents (compatible <<0.9.0)
 

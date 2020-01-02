@@ -40,7 +40,7 @@ elseif (qg('exercice'))
     }
 
     $criterias['id_exercice'] = $exercice->id;
-    $compte_resultat = $rapports->compteResultat($criterias);
+    $compte_resultat = $rapports->compteResultat($criterias, [6, 7]);
     $compte_benevolat =  $bd->compteResultatBenevolat($criterias);
     $compte_benevolat['produits']['general'] = $compte_benevolat['produits']['total'] + $compte_resultat['produits']['total'];
     $compte_benevolat['charges']['general'] = $compte_benevolat['charges']['total'] + $compte_resultat['charges']['total'];

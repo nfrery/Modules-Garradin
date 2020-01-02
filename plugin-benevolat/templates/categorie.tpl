@@ -28,7 +28,7 @@
             <td class="num">{$benevolat.nb_heures}</td>
             <td class="actions">
                 <a class="icn" href="{plugin_url file="cat_voir.php"}?id={$benevolat.id}" title="Voir les enregistrements">𝍢</a>
-                {if $session->canAccess('membres', Garradin\Membres::DROIT_ADMIN)}
+                {if $session->canAccess('membres', Membres::DROIT_ADMIN)}
                     <a class="icn" href="{plugin_url file="cat_modifier.php"}?id={$benevolat.id}" title="Modifier">✎</a>
                     <a class="icn" href="{plugin_url file="cat_supprimer.php"}?id={$benevolat.id}" title="Supprimer">✘</a>
                 {/if}

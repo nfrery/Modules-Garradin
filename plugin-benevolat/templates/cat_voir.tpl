@@ -45,7 +45,7 @@
             <td>{$benevolat.description_courte}{if strlen($benevolat.description) >= 30}…{/if}</td>
             <td class="actions">
                 <a class="icn" href="{plugin_url file="benevolat_voir.php"}?id={$benevolat.id}" title="Voir les détails de la contribution.">𝍢</a>
-                {if $session->canAccess('membres', Garradin\Membres::DROIT_ADMIN)}
+                {if $session->canAccess('membres', Membres::DROIT_ADMIN)}
                     <a class="icn" href="{plugin_url file="benevolat_modifier.php"}?id={$benevolat.id}" title="Modifier">✎</a>
                     <a class="icn" href="{plugin_url file="benevolat_supprimer.php"}?id={$benevolat.id}" title="Supprimer">✘</a>
                 {/if}

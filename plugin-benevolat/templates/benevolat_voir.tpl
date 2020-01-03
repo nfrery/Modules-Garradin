@@ -9,7 +9,7 @@
 <dl class="describe">
 <dt><label>Personne bénévole</label></dt>
     {if $contribution.id_benevole != NULL}
-        <dd>{if $session->canAccess('compta', Garradin\Membres::DROIT_ACCES)}
+        <dd>{if $session->canAccess('compta', Membres::DROIT_ACCES)}
                 <a href="{$admin_url}membres/fiche.php?id={$contribution.id_benevole}">{$contribution.nom_membre}</a>
             {else}
                 {$contribution.nom_membre}
@@ -50,7 +50,7 @@
     <dt><label>Membre ayant ajouté cette contribution</label></dt>
     <dd>
         {if $contribution.id_auteur}
-            {if $session->canAccess('compta', Garradin\Membres::DROIT_ACCES)}
+            {if $session->canAccess('compta', Membres::DROIT_ACCES)}
                 <a href="{$admin_url}membres/fiche.php?id={$contribution.id_auteur}">{$contribution.nom_auteur}</a>
             {else}
                 {$contribution.nom_auteur}
